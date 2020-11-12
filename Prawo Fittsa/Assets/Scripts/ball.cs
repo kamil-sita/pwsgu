@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class ball : MonoBehaviour, IPointerClickHandler
 {
-    private Boolean clicked = false;
+    private bool clicked = false;
     private GameObject watcher;
     private ballBehavior watcherScript;
 
