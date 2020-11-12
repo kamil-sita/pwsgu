@@ -33,6 +33,11 @@ public class ball : MonoBehaviour, IPointerClickHandler
     // Update is called once per frame
     void Update()
     {
+        if (changeMaterial)
+        {
+            changeMaterial = false;
+            gameObject.GetComponent<MeshRenderer>().material = newMaterial;
+        }
         if (clicked)
         {
             Debug.Log("Ball clicked");
