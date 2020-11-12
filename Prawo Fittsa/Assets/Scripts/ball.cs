@@ -11,6 +11,13 @@ public class ball : MonoBehaviour, IPointerClickHandler
     private ballBehavior watcherScript;
 
     private bool changeMaterial = false;
+
+    private Material newMaterial;
+
+    public void SetMaterial(Material newMat){
+        newMaterial = newMat;
+        changeMaterial = true;
+    }
     public void OnPointerClick(PointerEventData eventData)
     {
         clicked = true;
