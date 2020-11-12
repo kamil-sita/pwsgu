@@ -26,7 +26,7 @@ public class ball : MonoBehaviour, IPointerClickHandler
     // Start is called before the first frame update
     void Start()
     {
-        watcher = GameObject.Find("Watcher");
+        watcher = GameObject.Find("Watcher"); //todo remove hardcode
         watcherScript = watcher.GetComponent<ballBehavior>();
     }
 
