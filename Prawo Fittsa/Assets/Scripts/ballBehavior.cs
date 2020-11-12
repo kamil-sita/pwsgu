@@ -21,7 +21,7 @@ public class ballBehavior : MonoBehaviour
         if (ball)
         {
             Debug.Log(ball.name);
-            ball.GetComponent<MeshRenderer>().material = highlightedMaterial;
+            ball.GetComponent<ball>().SetMaterial(highlightedMaterial);
         }
 
     }
@@ -37,6 +37,7 @@ public class ballBehavior : MonoBehaviour
         if (clickedBall == ball)
         {
 
+            clickedBall.GetComponent<ball>().SetMaterial(defaultMaterial);
         }
     }
 }
