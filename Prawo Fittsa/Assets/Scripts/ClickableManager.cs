@@ -9,17 +9,20 @@ public class ClickableManager : MonoBehaviour
 
     [Header("Hierarchy, in which objects are put")]
     public GameObject hierarchy; //todo if missing, generate it
-  
+
+    [Header("Selection strategy. 0 = random, 1 = other side")]
+    public int selectionStrategy = 0; //todo enum or lambda
 
     //todo - move methods below to object responsible for generating;
     [Header("=========Object generation========")]
     [Header("Template of cloned object")]
     public GameObject templateHierarchy;
+
     [Header("Amount of objects to generate")]
     public int countToGenerate = 15; //todo ensure makes sense
 
     [Header("Generation strategy. 0 = random, 1 = circle")]
-    public int generationStrategy = 0; //todo enum
+    public int generationStrategy = 0; //todo enum or lambda
 
     [Header("Position of cloned object")]
     public float xMin; //todo  check if min < max
@@ -37,7 +40,6 @@ public class ClickableManager : MonoBehaviour
     private GameObject selectedGameObject = null;
     private GameObject clickedAtLastIteration = null;
     private GameObject lastSelected = null;
-    private int previousSelectedIndex = -1;
 
     void Start()
     {
@@ -50,12 +52,12 @@ public class ClickableManager : MonoBehaviour
         {
             Initialize();
             initialized = true;
-            SelectRandomElement();
+            selectNext();
         }
         HandleClick();
         if (selectedGameObject == null)
         {
-            SelectRandomElement();
+            selectNext();
         }
         
     }
@@ -78,7 +80,6 @@ public class ClickableManager : MonoBehaviour
                 putObjectAt(new Vector3((Mathf.Sin(iAsRadian) + 1) * 0.5f * (xMax - xMin) + xMin, UnityEngine.Random.Range(yMin, yMax), (Mathf.Cos(iAsRadian) + 1) * 0.5f * (zMax - zMin) + zMin));;
             }
         }
-        previousSelectedIndex = -1;
     }
 
     private void putObjectAt(Vector3 targetPosition)
@@ -120,7 +121,81 @@ public class ClickableManager : MonoBehaviour
         clickedAtLastIteration = clickedBall;
     }
 
-    private void SelectRandomElement()
+    private void selectNext()
+    {
+        Debug.Log(selectionStrategy);
+        if (selectionStrategy == 0)
+        {
+            selectRandomElement();
+        }
+
+        if (selectionStrategy == 1)
+        {
+            selectOnTheOtherSide();
+        }
+
+    }
+
+    private bool skip = false;
+
+    private void selectOnTheOtherSide()
+    {
+        int currentIndex = indexOfLastSelectedDefault0();
+        int length = hierarchy.transform.childCount;
+        int nextToSelect;
+        if (length % 2 == 0)
+        {
+            if (skip)
+            {
+                nextToSelect = (currentIndex - 1 + length / 2) % length;
+            } else
+            {
+                nextToSelect = (currentIndex + length / 2) % length;
+            }
+            skip = !skip;
+        } else
+        {
+            nextToSelect = (currentIndex + length / 2) % length;
+        }
+
+        int id = 0;
+
+        foreach (Transform child in hierarchy.transform) //todo maybe children in hierarchy have some kind of index? Would be faster
+        {
+            if (id == nextToSelect)
+            {
+                selectGameObject(child.gameObject);
+                return;
+            }
+            id++;
+        }
+
+        //todo throw exception, not found, but is should have been found
+    }
+
+    private int indexOfLastSelectedDefault0()
+    {
+        if (lastSelected == null) return 0;
+
+        int id = 0;
+
+        foreach (Transform child in hierarchy.transform) //todo possibly could be optimized to something like IndexOf
+        {
+            GameObject gameObject = child.gameObject;
+            if (gameObject != lastSelected)
+            {
+                id++;
+            } else
+            {
+                return id;
+            }
+        }
+
+        //object was removed, defaults to 0
+        return 0;
+    }
+
+    private void selectRandomElement()
     {
         //todo ensure at least two objects exists!
         //todo ensure objects are of correct type!
@@ -137,10 +212,10 @@ public class ClickableManager : MonoBehaviour
 
 
         GameObject toSelect = possibleChildrenToSelect[UnityEngine.Random.Range(0, possibleChildrenToSelect.Count)];
-        Select(toSelect);
+        selectGameObject(toSelect);
     }
 
-    private void Select(GameObject gameObject)
+    private void selectGameObject(GameObject gameObject)
     {
         if (selectedGameObject != null)
         {
