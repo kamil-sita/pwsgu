@@ -51,6 +51,8 @@ public class ballBehavior : MonoBehaviour
         {
             GameObject element = Instantiate(templateClickable);
             element.transform.position = new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), 0.05f, UnityEngine.Random.Range(-0.8f, 0.8f));
+            //I can't find a way to modify prefab field in runtime in such way it is cloned, dirty way for now:
+            element.GetComponent<ball>().SetWatcherScript(this);
             elements.Add(element);
         }
         availableIndexes = System.Linq.Enumerable.Range(0, countToGenerate).ToList();
