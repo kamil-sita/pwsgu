@@ -17,6 +17,10 @@ public class ClickableManager : MonoBehaviour
     public GameObject templateHierarchy;
     [Header("Amount of objects to generate")]
     public int countToGenerate = 15; //todo ensure makes sense
+
+    [Header("Generation strategy. 0 = random, 1 = circle")]
+    public int generationStrategy = 0; //todo enum
+
     [Header("Position of cloned object")]
     public float xMin; //todo  check if min < max
     public float xMax;
@@ -58,16 +62,33 @@ public class ClickableManager : MonoBehaviour
 
     private void Initialize()
     {
-        for (int i = 0; i < countToGenerate; i++)
+        if (generationStrategy == 0)
         {
-            GameObject element = createGameObjectFromTemplate();
-            element.transform.parent = hierarchy.transform;
-            element.transform.position = new Vector3(UnityEngine.Random.Range(xMin, xMax), 0.05f, UnityEngine.Random.Range(-0.8f, 0.8f));
-            //I can't find a way to modify prefab field in runtime in such way it is cloned, dirty way for now:
-            element.GetComponent<ClickableElement>().SetWatcherScript(this);
-            elements.Add(element);
+            for (int i = 0; i < countToGenerate; i++)
+            {
+                putObjectAt(new Vector3(UnityEngine.Random.Range(xMin, xMax), UnityEngine.Random.Range(yMin, yMax), UnityEngine.Random.Range(zMin, zMax)));
+            }
+        }
+        if (generationStrategy == 1)
+        {
+            for (int i = 0; i < countToGenerate; i++)
+            {
+                float iAsRadian = (1.0f * i / countToGenerate) * 2 * Mathf.PI;
+
+                putObjectAt(new Vector3((Mathf.Sin(iAsRadian) + 1) * 0.5f * (xMax - xMin) + xMin, UnityEngine.Random.Range(yMin, yMax), (Mathf.Cos(iAsRadian) + 1) * 0.5f * (zMax - zMin) + zMin));;
+            }
         }
         previousSelectedIndex = -1;
+    }
+
+    private void putObjectAt(Vector3 targetPosition)
+    {
+        GameObject element = createGameObjectFromTemplate();
+        element.transform.parent = hierarchy.transform;
+        element.transform.position = targetPosition;
+        //I can't find a way to modify prefab field in runtime in such way it is cloned, dirty way for now:
+        element.GetComponent<ClickableElement>().SetWatcherScript(this);
+        elements.Add(element);
     }
 
     private GameObject createGameObjectFromTemplate()
