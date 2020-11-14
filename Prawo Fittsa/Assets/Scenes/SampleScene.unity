@@ -703,7 +703,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 1
   m_Depth: -1
   m_CullingMask:
@@ -773,7 +773,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90.00001, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: 1.747}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1304384019
@@ -914,7 +914,7 @@ MonoBehaviour:
   defaultMaterial: {fileID: 2100000, guid: 70a3fd4f1ddf7444cb0573ae7ce04da4, type: 2}
   highlightedMaterial: {fileID: 2100000, guid: f7ed41cbc7abe6c47b79bc41678fd3ec, type: 2}
   templateClickable: {fileID: 1304384019}
-  clickables: 20
+  countToGenerate: 15
 --- !u!4 &1584249104
 Transform:
   m_ObjectHideFlags: 0
