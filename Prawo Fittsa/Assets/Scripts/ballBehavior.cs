@@ -7,13 +7,32 @@ using UnityEngine;
 public class ballBehavior : MonoBehaviour
 {
 
+    [Header("Materials")]
     public Material defaultMaterial;
-
     public Material highlightedMaterial;
 
-    public GameObject templateClickable;
+    [Header("Hierarchy, in which objects are put")]
+    public GameObject hierarchy; //todo if missing, generate it
 
-    public int countToGenerate = 15;
+
+
+
+
+    //todo - move methods below to object responsible for generating;
+    [Header("=========Object generation========")]
+    [Header("Template of cloned object")]
+    public GameObject templateClickable; //todo ensure correct type
+    [Header("Amount of objects to generate")]
+    public int countToGenerate = 15; //todo ensure makes sense
+    [Header("Position of cloned object")]
+    public float xMin; //todo  check if min < max
+    public float xMax;
+    public float yMin;
+    public float yMax;
+    public float zMin;
+    public float zMax;
+    //end of todo
+
 
     private bool initialized = false;
     private List<GameObject> elements = new List<GameObject>();
@@ -21,8 +40,6 @@ public class ballBehavior : MonoBehaviour
     private GameObject clickedAtLastIteration = null;
     private int previousSelectedIndex = -1;
     private List<int> availableIndexes = null;
-    
-
 
     void Start()
     {
@@ -50,7 +67,8 @@ public class ballBehavior : MonoBehaviour
         for (int i = 0; i < countToGenerate; i++)
         {
             GameObject element = Instantiate(templateClickable);
-            element.transform.position = new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), 0.05f, UnityEngine.Random.Range(-0.8f, 0.8f));
+            element.transform.parent = hierarchy.transform;
+            element.transform.position = new Vector3(UnityEngine.Random.Range(xMin, xMax), 0.05f, UnityEngine.Random.Range(-0.8f, 0.8f));
             //I can't find a way to modify prefab field in runtime in such way it is cloned, dirty way for now:
             element.GetComponent<ball>().SetWatcherScript(this);
             elements.Add(element);
