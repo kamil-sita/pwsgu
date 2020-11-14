@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class ball : MonoBehaviour, IPointerClickHandler
 {
     private bool clicked = false;
-    private GameObject watcher;
+
     private ballBehavior watcherScript;
 
     private bool changeMaterial = false;
@@ -23,11 +23,13 @@ public class ball : MonoBehaviour, IPointerClickHandler
         clicked = true;
     }
 
+    public void SetWatcherScript(ballBehavior newWatcherScript)
+    {
+        watcherScript = newWatcherScript;
+    }
     // Start is called before the first frame update
     void Start()
     {
-        watcher = GameObject.Find("Watcher"); //todo remove hardcode
-        watcherScript = watcher.GetComponent<ballBehavior>();
     }
 
     // Update is called once per frame

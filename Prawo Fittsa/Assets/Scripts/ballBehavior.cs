@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,6 +19,8 @@ public class ballBehavior : MonoBehaviour
     private List<GameObject> elements = new List<GameObject>();
     private GameObject selectedGameObject = null;
     private GameObject clickedAtLastIteration = null;
+    private int previousSelectedIndex = -1;
+    private List<int> availableIndexes = null;
     
 
 
@@ -48,8 +51,12 @@ public class ballBehavior : MonoBehaviour
         {
             GameObject element = Instantiate(templateClickable);
             element.transform.position = new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), 0.05f, UnityEngine.Random.Range(-0.8f, 0.8f));
+            //I can't find a way to modify prefab field in runtime in such way it is cloned, dirty way for now:
+            element.GetComponent<ball>().SetWatcherScript(this);
             elements.Add(element);
         }
+        availableIndexes = System.Linq.Enumerable.Range(0, countToGenerate).ToList();
+        previousSelectedIndex = -1;
     }
 
     private void HandleClick()
@@ -74,7 +81,9 @@ public class ballBehavior : MonoBehaviour
 
     private void SelectRandomElement()
     {
-        GameObject toSelect = elements[UnityEngine.Random.Range(0, countToGenerate)];
+        int[] indexes = availableIndexes.FindAll(x => x != previousSelectedIndex).ToArray();
+        previousSelectedIndex = indexes[UnityEngine.Random.Range(0, indexes.Length)];
+        GameObject toSelect = elements[previousSelectedIndex];
         Select(toSelect);
     }
 
