@@ -13,6 +13,7 @@ public class ClickableManager : MonoBehaviour
 
     [Header("Hierarchy, in which objects are put")]
     public GameObject hierarchy; //todo if missing, generate it
+  
 
 
 
@@ -21,7 +22,7 @@ public class ClickableManager : MonoBehaviour
     //todo - move methods below to object responsible for generating;
     [Header("=========Object generation========")]
     [Header("Template of cloned object")]
-    public GameObject templateClickable; //todo ensure correct type
+    public GameObject templateHierarchy;
     [Header("Amount of objects to generate")]
     public int countToGenerate = 15; //todo ensure makes sense
     [Header("Position of cloned object")]
@@ -31,6 +32,7 @@ public class ClickableManager : MonoBehaviour
     public float yMax;
     public float zMin;
     public float zMax;
+    private int idOfTemplateToPut = 0;
     //end of todo
 
 
@@ -66,7 +68,7 @@ public class ClickableManager : MonoBehaviour
     {
         for (int i = 0; i < countToGenerate; i++)
         {
-            GameObject element = Instantiate(templateClickable);
+            GameObject element = createGameObjectFromTemplate();
             element.transform.parent = hierarchy.transform;
             element.transform.position = new Vector3(UnityEngine.Random.Range(xMin, xMax), 0.05f, UnityEngine.Random.Range(-0.8f, 0.8f));
             //I can't find a way to modify prefab field in runtime in such way it is cloned, dirty way for now:
@@ -75,6 +77,16 @@ public class ClickableManager : MonoBehaviour
         }
         availableIndexes = System.Linq.Enumerable.Range(0, countToGenerate).ToList();
         previousSelectedIndex = -1;
+    }
+
+    private GameObject createGameObjectFromTemplate()
+    {
+        //todo ensure selectedGameObject contains script "ClickableElement"
+        GameObject selectedGameObject = templateHierarchy.transform.GetChild(idOfTemplateToPut).gameObject;
+        GameObject element = Instantiate(selectedGameObject);
+        idOfTemplateToPut++;
+        idOfTemplateToPut = idOfTemplateToPut % templateHierarchy.transform.childCount;
+        return element;
     }
 
     private void HandleClick()
