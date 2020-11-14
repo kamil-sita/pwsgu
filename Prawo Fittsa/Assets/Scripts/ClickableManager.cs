@@ -102,6 +102,7 @@ public class ClickableManager : MonoBehaviour
     private void SelectRandomElement()
     {
         //todo ensure at least two objects exists!
+        //todo ensure objects are of correct type!
 
         List<GameObject> possibleChildrenToSelect = new List<GameObject>();
         foreach (Transform child in hierarchy.transform)
