@@ -32,8 +32,8 @@ public class ClickableManager : MonoBehaviour
     private List<GameObject> elements = new List<GameObject>();
     private GameObject selectedGameObject = null;
     private GameObject clickedAtLastIteration = null;
+    private GameObject lastSelected = null;
     private int previousSelectedIndex = -1;
-    private List<int> availableIndexes = null;
 
     void Start()
     {
@@ -67,7 +67,6 @@ public class ClickableManager : MonoBehaviour
             element.GetComponent<ClickableElement>().SetWatcherScript(this);
             elements.Add(element);
         }
-        availableIndexes = System.Linq.Enumerable.Range(0, countToGenerate).ToList();
         previousSelectedIndex = -1;
     }
 
@@ -97,15 +96,25 @@ public class ClickableManager : MonoBehaviour
 
     public void BallClicked(GameObject clickedBall)
     {
-        //clickedBall.GetComponent<ball>().SetMaterial(defaultMaterial);
         clickedAtLastIteration = clickedBall;
     }
 
     private void SelectRandomElement()
     {
-        int[] indexes = availableIndexes.FindAll(x => x != previousSelectedIndex).ToArray();
-        previousSelectedIndex = indexes[UnityEngine.Random.Range(0, indexes.Length)];
-        GameObject toSelect = elements[previousSelectedIndex];
+        //todo ensure at least two objects exists!
+
+        List<GameObject> possibleChildrenToSelect = new List<GameObject>();
+        foreach (Transform child in hierarchy.transform)
+        {
+            GameObject gameObject = child.gameObject;
+            if (gameObject != lastSelected)
+            {
+                possibleChildrenToSelect.Add(gameObject);
+            }
+        }
+
+
+        GameObject toSelect = possibleChildrenToSelect[UnityEngine.Random.Range(0, possibleChildrenToSelect.Count)];
         Select(toSelect);
     }
 
@@ -113,10 +122,11 @@ public class ClickableManager : MonoBehaviour
     {
         if (selectedGameObject != null)
         {
-            //TODO warn, exception
+            //TODO warn or throw exception - there is already one object selected, and probably has not been deselected
         }
         Debug.Log("here");
         selectedGameObject = gameObject;
+        lastSelected = gameObject;
         gameObject.GetComponent<ClickableElement>().SetSelectedMaterial();
     }
 }

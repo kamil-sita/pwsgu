@@ -1037,7 +1037,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hierarchy: {fileID: 129185699}
   templateHierarchy: {fileID: 1724693924}
-  countToGenerate: 15
+  countToGenerate: 2
   xMin: -0.8
   xMax: 0.8
   yMin: 0.05
