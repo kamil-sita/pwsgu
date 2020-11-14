@@ -6,18 +6,26 @@ using UnityEngine.EventSystems;
 
 public class ClickableElement : MonoBehaviour, IPointerClickHandler
 {
+
+    public Material defaultMaterial; //todo ensure material is selected
+    public Material selectedMaterial; //todo ensure material is selected
+
     private bool clicked = false;
 
     private ClickableManager watcherScript;
 
-    private bool changeMaterial = false;
-
     private Material newMaterial;
 
-    public void SetMaterial(Material newMat){
-        newMaterial = newMat;
-        changeMaterial = true;
+    public void SetSelectedMaterial()
+    {
+        newMaterial = selectedMaterial;
     }
+
+    public void SetDefaultMaterial()
+    {
+        newMaterial = defaultMaterial;
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
         clicked = true;
@@ -30,15 +38,17 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
     // Start is called before the first frame update
     void Start()
     {
+        gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (changeMaterial)
+        if (newMaterial != null)
         {
-            changeMaterial = false;
+            Debug.Log("Material change");
             gameObject.GetComponent<MeshRenderer>().material = newMaterial;
+            newMaterial = null;
         }
         if (clicked)
         {

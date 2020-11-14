@@ -7,17 +7,9 @@ using UnityEngine;
 public class ClickableManager : MonoBehaviour
 {
 
-    [Header("Materials")]
-    public Material defaultMaterial;
-    public Material highlightedMaterial;
-
     [Header("Hierarchy, in which objects are put")]
     public GameObject hierarchy; //todo if missing, generate it
   
-
-
-
-
 
     //todo - move methods below to object responsible for generating;
     [Header("=========Object generation========")]
@@ -97,7 +89,7 @@ public class ClickableManager : MonoBehaviour
             {
                 //success!!!!!!
                 selectedGameObject = null;
-                clickedAtLastIteration.GetComponent<ClickableElement>().SetMaterial(defaultMaterial);
+                clickedAtLastIteration.GetComponent<ClickableElement>().SetDefaultMaterial();
             }
         }
         clickedAtLastIteration = null;
@@ -125,6 +117,6 @@ public class ClickableManager : MonoBehaviour
         }
         Debug.Log("here");
         selectedGameObject = gameObject;
-        gameObject.GetComponent<ClickableElement>().SetMaterial(highlightedMaterial);
+        gameObject.GetComponent<ClickableElement>().SetSelectedMaterial();
     }
 }

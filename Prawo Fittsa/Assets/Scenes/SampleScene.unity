@@ -896,6 +896,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd943434a8b276a4b8affeff9be4ed73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultMaterial: {fileID: 2100000, guid: 70a3fd4f1ddf7444cb0573ae7ce04da4, type: 2}
+  selectedMaterial: {fileID: 2100000, guid: f7ed41cbc7abe6c47b79bc41678fd3ec, type: 2}
 --- !u!1 &1304384019
 GameObject:
   m_ObjectHideFlags: 0
@@ -1002,6 +1004,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd943434a8b276a4b8affeff9be4ed73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultMaterial: {fileID: 2100000, guid: 70a3fd4f1ddf7444cb0573ae7ce04da4, type: 2}
+  selectedMaterial: {fileID: 2100000, guid: f7ed41cbc7abe6c47b79bc41678fd3ec, type: 2}
 --- !u!1 &1584249102
 GameObject:
   m_ObjectHideFlags: 0
@@ -1031,8 +1035,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb256c9aa17de7c4492a229ffad4d093, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultMaterial: {fileID: 2100000, guid: 70a3fd4f1ddf7444cb0573ae7ce04da4, type: 2}
-  highlightedMaterial: {fileID: 2100000, guid: f7ed41cbc7abe6c47b79bc41678fd3ec, type: 2}
   hierarchy: {fileID: 129185699}
   templateHierarchy: {fileID: 1724693924}
   countToGenerate: 15
