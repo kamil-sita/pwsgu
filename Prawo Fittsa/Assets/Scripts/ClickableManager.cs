@@ -10,12 +10,22 @@ public class ClickableManager : MonoBehaviour
     [Header("Hierarchy, in which objects are put")]
     public GameObject hierarchy; //todo if missing, generate it
 
+
+
     [Header("Selection strategy. 0 = random, 1 = other side")]
     public int selectionStrategy = 0; //todo enum or lambda
 
-    //todo - move methods below to object responsible for generating;
-    [Header("=========Object generation========")]
+
+    [Header("Cycles to change slide and size (0 = never)")]
+    public int cycleCount = 5; //todo ensure >= 0 
+    public float minSlide = 0.3f; // todo ensure min < max
+    public float maxSlide = 1.0f;
+    public float minSize = 0.1f; // min < max
+    public float maxSize = 2.0f;
+
+    //start of todo - move methods below to object responsible for generating;
     [Header("Template of cloned object")]
+    [Header("=========Object generation========")] //those two labels seem to be inverted in Editor
     public GameObject templateHierarchy;
 
     [Header("Amount of objects to generate")]
@@ -24,6 +34,12 @@ public class ClickableManager : MonoBehaviour
     [Header("Generation strategy. 0 = random, 1 = circle")]
     public int generationStrategy = 0; //todo enum or lambda
 
+
+    [Header("Center position for cloned object")] //todo might be some helper object
+    public float xCenter = 0;
+    public float yCenter = 0;
+    public float zCenter = 0;
+
     [Header("Position of cloned object")]
     public float xMin; //todo  check if min < max
     public float xMax;
@@ -31,15 +47,16 @@ public class ClickableManager : MonoBehaviour
     public float yMax;
     public float zMin;
     public float zMax;
-    private int idOfTemplateToPut = 0;
     //end of todo
 
+    private int idOfTemplateToPut = 0;
 
     private bool initialized = false;
     private List<GameObject> elements = new List<GameObject>();
     private GameObject selectedGameObject = null;
     private GameObject clickedAtLastIteration = null;
     private GameObject lastSelected = null;
+    private int clickedCycle = 0;
 
     void Start()
     {
@@ -54,7 +71,7 @@ public class ClickableManager : MonoBehaviour
             initialized = true;
             selectNext();
         }
-        HandleClick();
+        handleClick();
         if (selectedGameObject == null)
         {
             selectNext();
@@ -80,13 +97,16 @@ public class ClickableManager : MonoBehaviour
                 putObjectAt(new Vector3((Mathf.Sin(iAsRadian) + 1) * 0.5f * (xMax - xMin) + xMin, UnityEngine.Random.Range(yMin, yMax), (Mathf.Cos(iAsRadian) + 1) * 0.5f * (zMax - zMin) + zMin));;
             }
         }
+        setRandomSlideScale();
     }
 
     private void putObjectAt(Vector3 targetPosition)
     {
         GameObject element = createGameObjectFromTemplate();
         element.transform.parent = hierarchy.transform;
-        element.transform.position = targetPosition;
+        ClickableElement clickable = element.GetComponent<ClickableElement>();
+        clickable.SetCenter(new Vector3(xCenter, yCenter, zCenter));
+        clickable.SetDefault(targetPosition);
         //I can't find a way to modify prefab field in runtime in such way it is cloned, dirty way for now:
         element.GetComponent<ClickableElement>().SetWatcherScript(this);
         elements.Add(element);
@@ -102,13 +122,14 @@ public class ClickableManager : MonoBehaviour
         return element;
     }
 
-    private void HandleClick()
+    private void handleClick()
     {
         if (clickedAtLastIteration != null)
         {
             if (clickedAtLastIteration == selectedGameObject)
             {
                 //success!!!!!!
+                cycleIteration();
                 selectedGameObject = null;
                 clickedAtLastIteration.GetComponent<ClickableElement>().SetDefaultMaterial();
             }
@@ -121,9 +142,41 @@ public class ClickableManager : MonoBehaviour
         clickedAtLastIteration = clickedBall;
     }
 
+    private void cycleIteration()
+    {
+        clickedCycle++;
+        if (cycleCount != 0)
+        {
+            if (clickedCycle > cycleCount)
+            {
+                clickedCycle = 0;
+                setRandomSlideScale();
+            }
+        }
+    }
+
+    private void setRandomSlideScale()
+    {
+
+        float scale = UnityEngine.Random.Range(minSize, maxSize);
+        float slide = UnityEngine.Random.Range(minSlide, maxSlide);
+        setSlideScale(slide, scale);
+    }
+    
+    private void setSlideScale(float slide, float scale)
+    {
+        foreach (Transform child in hierarchy.transform)
+        {
+            GameObject gameObject = child.gameObject;
+            //todo check if is ClickableElement
+            ClickableElement clickableElement = gameObject.GetComponent<ClickableElement>();
+            clickableElement.SetScaleMultiplier(scale);
+            clickableElement.Slide(slide);
+        }
+    }
+
     private void selectNext()
     {
-        Debug.Log(selectionStrategy);
         if (selectionStrategy == 0)
         {
             selectRandomElement();
@@ -221,7 +274,6 @@ public class ClickableManager : MonoBehaviour
         {
             //TODO warn or throw exception - there is already one object selected, and probably has not been deselected
         }
-        Debug.Log("here");
         selectedGameObject = gameObject;
         lastSelected = gameObject;
         gameObject.GetComponent<ClickableElement>().SetSelectedMaterial();

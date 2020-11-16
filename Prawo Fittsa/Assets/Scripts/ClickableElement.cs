@@ -9,12 +9,59 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
 
     public Material defaultMaterial; //todo ensure material is selected
     public Material selectedMaterial; //todo ensure material is selected
+    private Vector3 center;
+    private Vector3 defaultPos;
+    private float slide = 1.0f;
 
     private bool clicked = false;
 
     private ClickableManager watcherScript;
 
     private Material newMaterial;
+
+    private Vector3 defaultScale;
+    private bool defaultScalePresent = false; //Vector3 is non nullable
+
+    public void SetScaleMultiplier(float value)
+    {
+        if (!defaultScalePresent)
+        {
+            defaultScale = this.transform.localScale;
+            defaultScalePresent = true;
+        }
+
+        this.transform.localScale = defaultScale * value;
+
+    }
+
+    public void SetDefault(Vector3 vector3)
+    {
+        this.defaultPos = new Vector3(vector3.x, vector3.y, vector3.z);
+        recalculatePosition();
+    }
+
+    public void SetCenter(Vector3 vector3)
+    {
+        this.center = new Vector3(vector3.x, vector3.y, vector3.z);
+        recalculatePosition();
+    }
+
+    public void Slide(float slide)
+    {
+        this.slide = slide;
+        recalculatePosition();
+    }
+
+    private void recalculatePosition()
+    {
+        if (center == null || defaultPos == null)
+        {
+            return; //not enough arguments yet
+        }
+        Vector3 diff = defaultPos - center;
+        Vector3 scaledDiff = slide * diff;
+        this.transform.position = center + scaledDiff;
+    }
 
     public void SetSelectedMaterial()
     {
@@ -46,13 +93,11 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
     {
         if (newMaterial != null)
         {
-            Debug.Log("Material change");
             gameObject.GetComponent<MeshRenderer>().material = newMaterial;
             newMaterial = null;
         }
         if (clicked)
         {
-            Debug.Log("Ball clicked");
             clicked = false;
             watcherScript.BallClicked(this.gameObject);
         }
