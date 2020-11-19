@@ -4,24 +4,68 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+
+/// <summary>
+/// Represents a clickable element, is related to ClickableManager
+/// </summary>
 public class ClickableElement : MonoBehaviour, IPointerClickHandler
 {
 
+    [Header("Default material, for unselected object")]
+    ///Default material, used if object is not selected for being clicked
     public Material defaultMaterial; //todo ensure material is selected
+
+
+    [Header("Material for selected object")]
+    /// <summary>
+    /// Material used when object is selected
+    /// </summary>
     public Material selectedMaterial; //todo ensure material is selected
+
+    /// <summary>
+    /// center position - used when slide is equal to 0
+    /// </summary>
     private Vector3 center;
-    private Vector3 defaultPos;
+
+    /// <summary>
+    /// default (max) position for the element. User when slide is equal to 1
+    /// </summary>
+    private Vector3 defaultPos; //default (max) position for the element. User when slide is equal to 1
+
+    /// <summary>
+    /// coefficient that decides on how close the position is to either "center" or "defaultPos". Scales linearly, with slide = 0 being center and slide = 1 being defaultPos
+    /// </summary>
     private float slide = 1.0f;
 
+    /// <summary>
+    /// denotes whether this object has been clicked on since last iteration
+    /// </summary>
     private bool clicked = false;
 
+    /// <summary>
+    /// Reference to the ClickableManager that manages this clickable object
+    /// </summary>
     private ClickableManager watcherScript;
 
+    /// <summary>
+    /// defines material that this object will change to on the next iteration
+    /// </summary>
     private Material newMaterial;
 
+    /// <summary>
+    /// Default scale of this object, as set from Unity inspector
+    /// </summary>
     private Vector3 defaultScale;
-    private bool defaultScalePresent = false; //Vector3 is non nullable
 
+    /// <summary>
+    /// Denotes whether defaultScale was set already. Used because Vector3 is not nullable
+    /// </summary>
+    private bool defaultScalePresent = false;
+
+    /// <summary>
+    /// Scales this object to the new size, without ignoring default scale that this object has
+    /// </summary>
+    /// <param name="value">Size to set for this object, relative to the default scale</param>
     public void SetScaleMultiplier(float value)
     {
         if (!defaultScalePresent)
@@ -34,24 +78,39 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
 
     }
 
+    /// <summary>
+    /// Sets default (max) position for this object
+    /// </summary>
+    /// <param name="vector3">default/max position</param>
     public void SetDefault(Vector3 vector3)
     {
         this.defaultPos = new Vector3(vector3.x, vector3.y, vector3.z);
         recalculatePosition();
     }
 
+    /// <summary>
+    /// Sets center position for this object
+    /// </summary>
+    /// <param name="vector3">center position</param>
     public void SetCenter(Vector3 vector3)
     {
         this.center = new Vector3(vector3.x, vector3.y, vector3.z);
         recalculatePosition();
     }
 
+    /// <summary>
+    /// Sets slide parameter, that describes how far this object is between its center and default/max position. For value of 0 position is center, for value 1 position is default/max. Scales linearly.
+    /// </summary>
+    /// <param name="slide">slide coefficient</param>
     public void Slide(float slide)
     {
         this.slide = slide;
         recalculatePosition();
     }
 
+    /// <summary>
+    /// Recalculates position based on center, max/default and slide
+    /// </summary>
     private void recalculatePosition()
     {
         if (center == null || defaultPos == null)
@@ -63,39 +122,59 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
         this.transform.position = center + scaledDiff;
     }
 
+    /// <summary>
+    /// Sets material of this object to "selected" material. Updates on next iteration
+    /// </summary>
     public void SetSelectedMaterial()
     {
         newMaterial = selectedMaterial;
     }
 
+    /// <summary>
+    /// Sets material of this object to "default" material. Updates on next iteration
+    /// </summary>
     public void SetDefaultMaterial()
     {
         newMaterial = defaultMaterial;
     }
 
+    /// <summary>
+    /// Interface implementation that is used to check whether this object has been clicked on by user
+    /// </summary>
     public void OnPointerClick(PointerEventData eventData)
     {
         clicked = true;
     }
 
+    /// <summary>
+    /// Sets manager script for this object
+    /// </summary>
+    /// <param name="newWatcherScript">manager script</param>
     public void SetWatcherScript(ClickableManager newWatcherScript)
     {
         watcherScript = newWatcherScript;
     }
-    // Start is called before the first frame update
+
+    /// <summary>
+    /// Start is called before the first frame update
+    /// </summary>
     void Start()
     {
         gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Update is called once per frame
+    /// </summary>
     void Update()
     {
+        //updating material
         if (newMaterial != null)
         {
             gameObject.GetComponent<MeshRenderer>().material = newMaterial;
             newMaterial = null;
         }
+        //calling manager if clicked
         if (clicked)
         {
             clicked = false;
