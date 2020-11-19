@@ -58,6 +58,10 @@ public class ClickableManager : MonoBehaviour
     private GameObject lastSelected = null;
     private int clickedCycle = 0;
 
+    private LineDrawer lineDrawer = new LineDrawer(); 
+
+
+
     void Start()
     {
 
@@ -76,7 +80,8 @@ public class ClickableManager : MonoBehaviour
         {
             selectNext();
         }
-        
+ 
+
     }
 
     private void Initialize()
@@ -128,6 +133,8 @@ public class ClickableManager : MonoBehaviour
         {
             if (clickedAtLastIteration == selectedGameObject)
             {
+                lineDrawer.removeLine();
+                lineDrawer.drawLine();
                 //success!!!!!!
                 cycleIteration();
                 selectedGameObject = null;
@@ -135,6 +142,7 @@ public class ClickableManager : MonoBehaviour
             }
         }
         clickedAtLastIteration = null;
+
     }
 
     public void BallClicked(GameObject clickedBall)

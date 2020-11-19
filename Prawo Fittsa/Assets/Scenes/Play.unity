@@ -1054,6 +1054,7 @@ MonoBehaviour:
   yMax: 0.05
   zMin: -0.9
   zMax: 0.9
+  lineDrawer: {fileID: 0}
 --- !u!4 &1584249104
 Transform:
   m_ObjectHideFlags: 0
