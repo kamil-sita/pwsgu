@@ -253,11 +253,11 @@ public class ClickableManager : MonoBehaviour, ClickableListener
 
         int id = 0;
 
-        foreach (Transform child in hierarchy.transform) //todo maybe children in hierarchy have some kind of index? Would be faster
+        foreach (Transform child in hierarchy.transform) //possibly replaceable by lookup, instead of iterating over it
         {
             if (id == nextToSelect)
             {
-                selectGameObject(child.gameObject);
+                selectGameObject(child.gameObject.GetComponent<ClickableElement>());
                 return;
             }
             id++;
@@ -276,7 +276,7 @@ public class ClickableManager : MonoBehaviour, ClickableListener
 
         int id = 0;
 
-        foreach (Transform child in hierarchy.transform) //todo possibly could be optimized to something like IndexOf
+        foreach (Transform child in hierarchy.transform) //possibly replaceable by lookup, instead of iterating over it
         {
             GameObject gameObject = child.gameObject;
             if (gameObject != lastSelected)
@@ -297,43 +297,61 @@ public class ClickableManager : MonoBehaviour, ClickableListener
     /// </summary>
     private void selectRandomElement()
     {
-        //todo ensure at least two objects exists!
-        //todo ensure objects are of correct type!
 
-        List<GameObject> possibleChildrenToSelect = new List<GameObject>();
+        List<ClickableElement> possibleChildrenToSelect = new List<ClickableElement>();
         foreach (Transform child in hierarchy.transform)
         {
+            Debug.Log("Consideringa");
             GameObject gameObject = child.gameObject;
             if (gameObject != lastSelected)
             {
-                possibleChildrenToSelect.Add(gameObject);
+                Debug.Log("Consideringb");
+                possibleChildrenToSelect.Add(gameObject.GetComponent<ClickableElement>());
             }
         }
 
+        if (possibleChildrenToSelect.Count == 0)
+        {
+            Debug.Log("Consideringc");
+            selectGameObject(lastSelected.GetComponent<ClickableElement>());
+            return;
+        }
 
-        GameObject toSelect = possibleChildrenToSelect[UnityEngine.Random.Range(0, possibleChildrenToSelect.Count)];
+        Debug.Log("Consideringd");
+
+        ClickableElement toSelect = possibleChildrenToSelect[UnityEngine.Random.Range(0, possibleChildrenToSelect.Count)];
+
+        Debug.Log("Consideringd" + toSelect);
         selectGameObject(toSelect);
     }
 
     /// <summary>
-    /// Select given game object for selection
+    /// Select given  clickable element for selection
     /// </summary>
-    /// <param name="gameObject"></param>
-    private void selectGameObject(GameObject gameObject)
+    private void selectGameObject(ClickableElement clickableElement)
     {
-        if (selectedGameObject != null)
+        if (clickableElement == null)
         {
+            Debug.Log("Consideringda");
+            return;
+        }
+
+        if (selectedGameObject != null)
+        { 
+            Debug.Log("Consideringdb");
             Debug.Log("Selecting one game object without deselecting the others! This might lead to errors");
         }
-        var clickableElement = gameObject.GetComponent<ClickableElement>();
+        Debug.Log("Consideringdbaa");
         //selected ball might not have this script selected as manager, if it was not created by ObjectGenerator. Because of that, we make sure it knows about this script
         clickableElement.SetManagerScript(this);
-        selectedGameObject = gameObject;
-        lastSelected = gameObject;
+        selectedGameObject = clickableElement.transform.gameObject;
+        lastSelected = clickableElement.transform.gameObject;
         ExecuteEvents.Execute<MaterialChangeListener>(
-                            gameObject,
+                            clickableElement.transform.gameObject,
                             null,
                             (handler, data) => clickableElement.SetSelectedMaterial()
                             );
+
+        Debug.Log("Consideringdbadsda");
     }
 }

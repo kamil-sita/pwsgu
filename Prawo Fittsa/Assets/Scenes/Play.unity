@@ -1037,7 +1037,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hierarchy: {fileID: 129185699}
-  selectionStrategy: 1
+  selectionStrategy: 0
   cycleCount: 3
   minSlide: 0.7
   maxSlide: 1
@@ -1071,8 +1071,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   templateHierarchy: {fileID: 1724693924}
-  countToGenerate: 15
-  generationStrategy: 0
+  countToGenerate: 0
+  generationStrategy: 1
   xCenter: 0
   yCenter: 0.05
   zCenter: 0
