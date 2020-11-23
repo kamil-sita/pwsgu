@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Enum that describes available selection strategies
@@ -154,7 +155,10 @@ public class ClickableManager : MonoBehaviour, ClickableListener
             lineDrawer.drawLine();
             cycleIteration();
             selectedGameObject = null;
-            clickedAtLastIteration.SetDefaultMaterial();
+            ExecuteEvents.Execute<MaterialChangeListener>(
+                                clickedAtLastIteration.transform.gameObject,
+                                null,
+                                MaterialChangeData.materialChangeDefaultDelegate);
         }
     }
 
@@ -194,7 +198,6 @@ public class ClickableManager : MonoBehaviour, ClickableListener
         foreach (Transform child in hierarchy.transform)
         {
             GameObject gameObject = child.gameObject;
-            //todo check if is ClickableElement
             ClickableElement clickableElement = gameObject.GetComponent<ClickableElement>();
             clickableElement.SetScaleMultiplier(scale);
             clickableElement.Slide(slide);
@@ -325,6 +328,9 @@ public class ClickableManager : MonoBehaviour, ClickableListener
         gameObject.GetComponent<ClickableElement>().SetManagerScript(this);
         selectedGameObject = gameObject;
         lastSelected = gameObject;
-        gameObject.GetComponent<ClickableElement>().SetSelectedMaterial();
+        ExecuteEvents.Execute<MaterialChangeListener>(
+                            gameObject,
+                            null,
+                            MaterialChangeData.materialChangeSelectedDelegate);
     }
 }

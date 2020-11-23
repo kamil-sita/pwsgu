@@ -8,19 +8,19 @@ using UnityEngine.EventSystems;
 /// <summary>
 /// Represents a clickable element, is related to ClickableManager
 /// </summary>
-public class ClickableElement : MonoBehaviour, IPointerClickHandler
+public class ClickableElement : MonoBehaviour, IPointerClickHandler, MaterialChangeListener
 {
 
     [Header("Default material, for unselected object")]
     ///Default material, used if object is not selected for being clicked
-    public Material defaultMaterial; //todo ensure material is selected
+    public Material defaultMaterial;
 
 
     [Header("Material for selected object")]
     /// <summary>
     /// Material used when object is selected
     /// </summary>
-    public Material selectedMaterial; //todo ensure material is selected
+    public Material selectedMaterial;
 
     /// <summary>
     /// center position - used when slide is equal to 0
@@ -46,11 +46,6 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
     /// coefficient that decides on how close the position is to either "center" or "defaultPos". Scales linearly, with slide = 0 being center and slide = 1 being defaultPos
     /// </summary>
     private float slide = 1.0f;
-
-    /// <summary>
-    /// denotes whether this object has been clicked on since last iteration
-    /// </summary>
-    private bool clicked = false;
 
     /// <summary>
     /// Reference to the ClickableManager that manages this clickable object
@@ -138,7 +133,7 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public void SetSelectedMaterial()
     {
-        newMaterial = selectedMaterial;
+        gameObject.GetComponent<MeshRenderer>().material = selectedMaterial;
     }
 
     /// <summary>
@@ -146,7 +141,7 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public void SetDefaultMaterial()
     {
-        newMaterial = defaultMaterial;
+        gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
     }
 
     /// <summary>
@@ -154,7 +149,11 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public void OnPointerClick(PointerEventData eventData)
     {
-        clicked = true;
+        PointClickedData data = new PointClickedData(EventSystem.current, this);
+        ExecuteEvents.Execute<ClickableListener>(
+                            watcherScript.transform.gameObject,
+                            data,
+                            PointClickedData.clickedDelegate);
     }
 
     /// <summary>
@@ -171,7 +170,14 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
     /// </summary>
     void Start()
     {
-        gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
+        if (defaultMaterial == null)
+        {
+            Debug.Log("Default material is missing");
+        }
+        if (selectedMaterial == null)
+        {
+            Debug.Log("Selected material is missing");
+        }
     }
 
     /// <summary>
@@ -179,25 +185,6 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
     /// </summary>
     void Update()
     {
-        //updating material
-        if (newMaterial != null)
-        {
-            gameObject.GetComponent<MeshRenderer>().material = newMaterial;
-            newMaterial = null;
-        }
-        //calling manager if clicked
-        if (clicked)
-        {
-            clicked = false;
-            PointClickedData data = new PointClickedData(EventSystem.current, this);
-            ExecuteEvents.Execute<ClickableListener>(
-                                watcherScript.transform.gameObject,
-                                data,
-                                PointClickedData.clickedDelegate);
-
-
-            //watcherScript.BallClicked(this.gameObject);
-        }
     }
 
 
