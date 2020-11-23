@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 /// <summary>
 /// Represents a clickable element, is related to ClickableManager
 /// </summary>
-public class ClickableElement : MonoBehaviour, IPointerClickHandler
+public class ClickableElement : MonoBehaviour, IPointerClickHandler, MaterialChangeListener
 {
 
     [Header("Default material, for unselected object")]
@@ -133,7 +133,7 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public void SetSelectedMaterial()
     {
-        newMaterial = selectedMaterial;
+        gameObject.GetComponent<MeshRenderer>().material = selectedMaterial;
     }
 
     /// <summary>
@@ -141,7 +141,7 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public void SetDefaultMaterial()
     {
-        newMaterial = defaultMaterial;
+        gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
     }
 
     /// <summary>
@@ -170,10 +170,7 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
     /// </summary>
     void Start()
     {
-        if (defaultMaterial != null)
-        {
-            gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
-        } else
+        if (defaultMaterial == null)
         {
             Debug.Log("Default material is missing");
         }
@@ -188,12 +185,6 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
     /// </summary>
     void Update()
     {
-        //updating material
-        if (newMaterial != null)
-        {
-            gameObject.GetComponent<MeshRenderer>().material = newMaterial;
-            newMaterial = null;
-        }
     }
 
 
