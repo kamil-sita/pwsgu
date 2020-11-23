@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+/// <summary>
+/// Enum that describes available generation strategies
+/// </summary>
 public enum GenerationStrategy
 {
     GENERATE_RANDOMLY,
     GENERATE_CIRCLE
 }
 
+/// <summary>
+/// Script that can be used to genrate objects, accordingly to settings
+/// </summary>
 public class ObjectGenerator : IObjectGenerator
 {
     /// <summary>
@@ -18,13 +23,13 @@ public class ObjectGenerator : IObjectGenerator
 
 
     [Header("Amount of objects to generate")]
-    public int countToGenerate = 15; //todo ensure makes sense
+    public int countToGenerate = 15;
 
-    [Header("Generation strategy. 0 = random, 1 = circle")]
+    [Header("Generation strategy.")]
     public GenerationStrategy generationStrategy = GenerationStrategy.GENERATE_CIRCLE;
 
 
-    [Header("Center position for cloned object")] //todo might be some helper object
+    [Header("Center position for cloned object")]
     public float xCenter = 0;
     public float yCenter = 0;
     public float zCenter = 0;
@@ -77,6 +82,11 @@ public class ObjectGenerator : IObjectGenerator
             zMin = zMax;
             zMax = tmpFloat;
             Debug.Log("zMin > zMax!");
+        }
+        if (countToGenerate < 0)
+        {
+            Debug.Log("Count to generate < 0!");
+            countToGenerate = 0;
         }
     }
 
