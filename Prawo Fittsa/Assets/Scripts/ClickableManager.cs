@@ -17,7 +17,7 @@ public enum SelectionStrategy
 /// <summary>
 /// Manages behavior and updates of managed ClickableElements
 /// </summary>
-public class ClickableManager : MonoBehaviour
+public class ClickableManager : MonoBehaviour, ClickableListener
 {
 
     [Header("Hierarchy, in which objects are put when generated.")]
@@ -40,20 +40,13 @@ public class ClickableManager : MonoBehaviour
     public float minSize = 0.1f;
     public float maxSize = 2.0f;
 
-    //start of todo - move methods below to object responsible for generating;
     [Header("Template of cloned object")]
-    [Header("=========Object generation========")] //those two labels seem to be inverted in Editor
     public IObjectGenerator objectGenerator;
 
     /// <summary>
     /// Contains reference to object selected by ClickableManager as selection target
     /// </summary>
     private GameObject selectedGameObject = null;
-
-    /// <summary>
-    /// Contains reference to object clicked by user at last iteration
-    /// </summary>
-    private GameObject clickedAtLastIteration = null;
 
     /// <summary>
     /// Contains reference to object selected by random generator in order to not select the same object twice in a row
@@ -84,7 +77,6 @@ public class ClickableManager : MonoBehaviour
     /// </summary>
     void Update()
     {
-        handleClick();
         if (selectedGameObject == null)
         {
             selectNext();
@@ -150,33 +142,20 @@ public class ClickableManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Handles all the functions related to feedback from the clicked elements
+    /// Event information for clicked elements
     /// </summary>
-    private void handleClick()
+    /// <param name="clickable"></param>
+    public void ObjectClicked(PointClickedData clickable)
     {
-        if (clickedAtLastIteration != null)
+        var clickedAtLastIteration = clickable.selectedElement;
+        if (clickedAtLastIteration.transform.gameObject == selectedGameObject) //clicked element was the one that we looked for
         {
-            if (clickedAtLastIteration == selectedGameObject) //clicked element was the one that we looked for
-            {
-                lineDrawer.removeLine();
-                lineDrawer.drawLine();
-                //success!!!!!!
-                cycleIteration();
-                selectedGameObject = null;
-                clickedAtLastIteration.GetComponent<ClickableElement>().SetDefaultMaterial();
-            }
+            lineDrawer.removeLine();
+            lineDrawer.drawLine();
+            cycleIteration();
+            selectedGameObject = null;
+            clickedAtLastIteration.SetDefaultMaterial();
         }
-        clickedAtLastIteration = null;
-
-    }
-
-    /// <summary>
-    /// Notifies this manager that the passed object has been clicked
-    /// </summary>
-    /// <param name="clickedBall">Reference to clicked object</param>
-    public void BallClicked(GameObject clickedBall)
-    {
-        clickedAtLastIteration = clickedBall;
     }
 
     /// <summary>

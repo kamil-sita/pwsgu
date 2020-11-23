@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Defines interface for object generation
+/// </summary>
 public abstract class IObjectGenerator : MonoBehaviour
 {
     /// <summary>
