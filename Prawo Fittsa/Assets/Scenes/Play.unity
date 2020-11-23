@@ -1016,6 +1016,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1584249104}
   - component: {fileID: 1584249103}
+  - component: {fileID: 1584249105}
   m_Layer: 0
   m_Name: Watcher
   m_TagString: Untagged
@@ -1042,18 +1043,7 @@ MonoBehaviour:
   maxSlide: 1
   minSize: 0.5
   maxSize: 3
-  templateHierarchy: {fileID: 1724693924}
-  countToGenerate: 8
-  generationStrategy: 1
-  xCenter: 0
-  yCenter: 0
-  zCenter: 0
-  xMin: -0.9
-  xMax: 0.9
-  yMin: 0.05
-  yMax: 0.05
-  zMin: -0.9
-  zMax: 0.9
+  objectGenerator: {fileID: 1584249105}
 --- !u!4 &1584249104
 Transform:
   m_ObjectHideFlags: 0
@@ -1068,6 +1058,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1584249105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1584249102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a7b3f02417a1294da94b65c0176c2d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  templateHierarchy: {fileID: 1724693924}
+  countToGenerate: 1
+  generationStrategy: 0
+  xCenter: 0
+  yCenter: 0.05
+  zCenter: 0
+  xMin: -0.9
+  xMax: 0.9
+  yMin: 0.05
+  yMax: 0.05
+  zMin: -0.9
+  zMax: 0.9
 --- !u!1 &1724693924
 GameObject:
   m_ObjectHideFlags: 0

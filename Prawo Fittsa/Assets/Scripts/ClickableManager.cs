@@ -21,18 +21,16 @@ public class ClickableManager : MonoBehaviour
 {
 
     [Header("Hierarchy, in which objects are put when generated.")]
-
     /// <summary>
     /// Hierarchy in which new, spawned objects will be put. Can also be used to independently add object for this Manager
     /// </summary>
     public GameObject hierarchy; 
 
     [Header("Selection strategy.")]
-
     /// <summary>
     /// Manages behavior and updates of managed ClickableElements
     /// </summary>
-    public SelectionStrategy selectionStrategy = SelectionStrategy.SELECT_RANDOM;
+    public SelectionStrategy selectionStrategy = SelectionStrategy.SELECT_OTHER_SIDE;
 
 
     [Header("Cycles to change slide and size (0 = never)")]
@@ -45,35 +43,7 @@ public class ClickableManager : MonoBehaviour
     //start of todo - move methods below to object responsible for generating;
     [Header("Template of cloned object")]
     [Header("=========Object generation========")] //those two labels seem to be inverted in Editor
-    /// <summary>
-    /// Hierarchy that contains objects that will be used for generation
-    /// </summary>
-    public GameObject templateHierarchy;
-
-    [Header("Amount of objects to generate")]
-    public int countToGenerate = 15; //todo ensure makes sense
-
-    [Header("Generation strategy. 0 = random, 1 = circle")]
-    public int generationStrategy = 0; //todo enum or lambda
-
-
-    [Header("Center position for cloned object")] //todo might be some helper object
-    public float xCenter = 0;
-    public float yCenter = 0;
-    public float zCenter = 0;
-
-    [Header("Position of cloned object")]
-    public float xMin;
-    public float xMax;
-    public float yMin;
-    public float yMax;
-    public float zMin;
-    public float zMax;
-
-    /// <summary>
-    /// If of object in template hierarchy that will be used to generate new object
-    /// </summary>
-    private int idOfTemplateToPut = 0;
+    public IObjectGenerator objectGenerator;
 
     /// <summary>
     /// Contains reference to object selected by ClickableManager as selection target
@@ -104,7 +74,7 @@ public class ClickableManager : MonoBehaviour
     /// </summary>
     void Start()
     {
-        VariableCheck();
+        variableCheck();
         Initialize();
         selectNext();
     }
@@ -122,32 +92,20 @@ public class ClickableManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Returns hierarchy, that should contain generated objects
+    /// </summary>
+    /// <returns> hierarchy, that should contain generated objects</returns>
+    public GameObject GetHierarchy()
+    {
+        return hierarchy;
+    }
+
+    /// <summary>
     /// Checks all variables for correctness
     /// </summary>
-    private void VariableCheck()
+    private void variableCheck()
     {
         float tmpFloat;
-        if (xMin > xMax)
-        {
-            tmpFloat = xMin;
-            xMin = xMax;
-            xMax = tmpFloat;
-            Debug.Log("xMin > xMax!");
-        }
-        if (yMin > yMax)
-        {
-            tmpFloat = yMin;
-            yMin = yMax;
-            yMax = tmpFloat;
-            Debug.Log("yMin > yMax!");
-        }
-        if (zMin > zMax)
-        {
-            tmpFloat = zMin;
-            zMin = zMax;
-            zMax = tmpFloat;
-            Debug.Log("zMin > zMax!");
-        }
         if (minSlide > maxSlide)
         {
             tmpFloat = minSlide;
@@ -172,6 +130,10 @@ public class ClickableManager : MonoBehaviour
             Debug.Log("Hierarchy is missing!");
             hierarchy = new GameObject("Generated selectables hierarchy (default is missing)");
         }
+        if (objectGenerator == null)
+        {
+            Debug.Log("Object generator is null!");
+        }
     }
 
     /// <summary>
@@ -179,51 +141,12 @@ public class ClickableManager : MonoBehaviour
     /// </summary>
     private void Initialize()
     {
-        if (generationStrategy == 0)
+        if (objectGenerator != null)
         {
-            for (int i = 0; i < countToGenerate; i++)
-            {
-                putObjectAt(new Vector3(UnityEngine.Random.Range(xMin, xMax), UnityEngine.Random.Range(yMin, yMax), UnityEngine.Random.Range(zMin, zMax)));
-            }
-        }
-        if (generationStrategy == 1)
-        {
-            for (int i = 0; i < countToGenerate; i++)
-            {
-                float iAsRadian = (1.0f * i / countToGenerate) * 2 * Mathf.PI;
-
-                putObjectAt(new Vector3((Mathf.Sin(iAsRadian) + 1) * 0.5f * (xMax - xMin) + xMin, UnityEngine.Random.Range(yMin, yMax), (Mathf.Cos(iAsRadian) + 1) * 0.5f * (zMax - zMin) + zMin));;
-            }
+            objectGenerator.SetManager(this);
+            objectGenerator.GenerateObjects();
         }
         setRandomSlideScale();
-    }
-
-    /// <summary>
-    /// Prepares new object according to all rules (hierarchy, positions) and puts it in a given position
-    /// </summary>
-    /// <param name="targetPosition">default position for a new object</param>
-    private void putObjectAt(Vector3 targetPosition)
-    {
-        GameObject element = createGameObjectFromTemplate();
-        element.transform.parent = hierarchy.transform;
-        ClickableElement clickable = element.GetComponent<ClickableElement>();
-        clickable.SetCenter(new Vector3(xCenter, yCenter, zCenter));
-        clickable.SetDefault(targetPosition);
-        element.GetComponent<ClickableElement>().SetWatcherScript(this);
-    }
-
-    /// <summary>
-    /// Creates game object using template hierarchy
-    /// </summary>
-    /// <returns>newly created game object</returns>
-    private GameObject createGameObjectFromTemplate()
-    {
-        //todo ensure selectedGameObject contains script "ClickableElement"
-        GameObject selectedGameObject = templateHierarchy.transform.GetChild(idOfTemplateToPut).gameObject;
-        GameObject element = Instantiate(selectedGameObject);
-        idOfTemplateToPut++;
-        idOfTemplateToPut = idOfTemplateToPut % templateHierarchy.transform.childCount;
-        return element;
     }
 
     /// <summary>
@@ -277,7 +200,6 @@ public class ClickableManager : MonoBehaviour
     /// </summary>
     private void setRandomSlideScale()
     {
-
         float scale = UnityEngine.Random.Range(minSize, maxSize);
         float slide = UnityEngine.Random.Range(minSlide, maxSlide);
         setSlideScale(slide, scale);
@@ -326,6 +248,10 @@ public class ClickableManager : MonoBehaviour
     {
         int currentIndex = indexOfLastSelectedDefault0();
         int length = hierarchy.transform.childCount;
+        if (length == 0)
+        {
+            return;
+        }
         int nextToSelect;
         if (length % 2 == 0)
         {
@@ -416,8 +342,8 @@ public class ClickableManager : MonoBehaviour
         {
             Debug.Log("Selecting one game object without deselecting the others! This might lead to errors");
         }
-        //selected ball might not have this script selected as manager, if it was not created by it. Because of that, we make sure it knows about this script
-        gameObject.GetComponent<ClickableElement>().SetWatcherScript(this);
+        //selected ball might not have this script selected as manager, if it was not created by ObjectGenerator. Because of that, we make sure it knows about this script
+        gameObject.GetComponent<ClickableElement>().SetManagerScript(this);
         selectedGameObject = gameObject;
         lastSelected = gameObject;
         gameObject.GetComponent<ClickableElement>().SetSelectedMaterial();

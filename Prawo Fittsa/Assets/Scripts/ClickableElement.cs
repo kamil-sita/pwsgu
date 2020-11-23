@@ -160,10 +160,10 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
     /// <summary>
     /// Sets manager script for this object
     /// </summary>
-    /// <param name="newWatcherScript">manager script</param>
-    public void SetWatcherScript(ClickableManager newWatcherScript)
+    /// <param name="managerScript">manager script</param>
+    public void SetManagerScript(ClickableManager managerScript)
     {
-        watcherScript = newWatcherScript;
+        watcherScript = managerScript;
     }
 
     /// <summary>
