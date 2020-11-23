@@ -158,7 +158,8 @@ public class ClickableManager : MonoBehaviour, ClickableListener
             ExecuteEvents.Execute<MaterialChangeListener>(
                                 clickedAtLastIteration.transform.gameObject,
                                 null,
-                                MaterialChangeData.materialChangeDefaultDelegate);
+                                (handler, data) => clickedAtLastIteration.SetDefaultMaterial()
+                                );
         }
     }
 
@@ -324,13 +325,15 @@ public class ClickableManager : MonoBehaviour, ClickableListener
         {
             Debug.Log("Selecting one game object without deselecting the others! This might lead to errors");
         }
+        var clickableElement = gameObject.GetComponent<ClickableElement>();
         //selected ball might not have this script selected as manager, if it was not created by ObjectGenerator. Because of that, we make sure it knows about this script
-        gameObject.GetComponent<ClickableElement>().SetManagerScript(this);
+        clickableElement.SetManagerScript(this);
         selectedGameObject = gameObject;
         lastSelected = gameObject;
         ExecuteEvents.Execute<MaterialChangeListener>(
                             gameObject,
                             null,
-                            MaterialChangeData.materialChangeSelectedDelegate);
+                            (handler, data) => clickableElement.SetSelectedMaterial()
+                            );
     }
 }
