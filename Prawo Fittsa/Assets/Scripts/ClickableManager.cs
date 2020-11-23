@@ -26,10 +26,10 @@ public class ClickableManager : MonoBehaviour
 
 
     [Header("Cycles to change slide and size (0 = never)")]
-    public int cycleCount = 5; //todo ensure >= 0 
-    public float minSlide = 0.3f; // todo ensure min < max
+    public int cycleCount = 5;
+    public float minSlide = 0.3f;
     public float maxSlide = 1.0f;
-    public float minSize = 0.1f; // min < max
+    public float minSize = 0.1f;
     public float maxSize = 2.0f;
 
     //start of todo - move methods below to object responsible for generating;
@@ -53,13 +53,12 @@ public class ClickableManager : MonoBehaviour
     public float zCenter = 0;
 
     [Header("Position of cloned object")]
-    public float xMin; //todo  check if min < max
+    public float xMin;
     public float xMax;
     public float yMin;
     public float yMax;
     public float zMin;
     public float zMax;
-    //end of todo
 
     /// <summary>
     /// If of object in template hierarchy that will be used to generate new object
@@ -95,7 +94,7 @@ public class ClickableManager : MonoBehaviour
     /// </summary>
     void Start()
     {
-
+        VariableCheck();
         Initialize();
         selectNext();
     }
@@ -110,8 +109,59 @@ public class ClickableManager : MonoBehaviour
         {
             selectNext();
         }
- 
+    }
 
+    /// <summary>
+    /// Checks all variables for correctness
+    /// </summary>
+    private void VariableCheck()
+    {
+        float tmpFloat;
+        if (xMin > xMax)
+        {
+            tmpFloat = xMin;
+            xMin = xMax;
+            xMax = tmpFloat;
+            Debug.Log("xMin > xMax!");
+        }
+        if (yMin > yMax)
+        {
+            tmpFloat = yMin;
+            yMin = yMax;
+            yMax = tmpFloat;
+            Debug.Log("yMin > yMax!");
+        }
+        if (zMin > zMax)
+        {
+            tmpFloat = zMin;
+            zMin = zMax;
+            zMax = tmpFloat;
+            Debug.Log("zMin > zMax!");
+        }
+        if (minSlide > maxSlide)
+        {
+            tmpFloat = minSlide;
+            minSlide = maxSlide;
+            maxSlide = tmpFloat;
+            Debug.Log("minSlide > maxSlide!");
+        }
+        if (minSize > maxSize)
+        {
+            tmpFloat = minSize;
+            minSize = maxSize;
+            maxSize = tmpFloat;
+            Debug.Log("minSize > maxSize!");
+        }
+        if (cycleCount < 0)
+        {
+            cycleCount = 0;
+            Debug.Log("cycleCount < 0!");
+        }
+        if (hierarchy == null)
+        {
+            Debug.Log("Hierarchy is missing!");
+            hierarchy = new GameObject("Generated selectables hierarchy (default is missing)");
+        }
     }
 
     /// <summary>
