@@ -356,6 +356,8 @@ public class ClickableManager : MonoBehaviour
         {
             Debug.Log("Selecting one game object without deselecting the others! This might lead to errors");
         }
+        //selected ball might not have this script selected as manager, if it was not created by it. Because of that, we make sure it knows about this script
+        gameObject.GetComponent<ClickableElement>().SetWatcherScript(this);
         selectedGameObject = gameObject;
         lastSelected = gameObject;
         gameObject.GetComponent<ClickableElement>().SetSelectedMaterial();
