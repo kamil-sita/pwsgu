@@ -40,9 +40,7 @@ public class ClickableManager : MonoBehaviour
     public float minSize = 0.1f;
     public float maxSize = 2.0f;
 
-    //start of todo - move methods below to object responsible for generating;
     [Header("Template of cloned object")]
-    [Header("=========Object generation========")] //those two labels seem to be inverted in Editor
     public IObjectGenerator objectGenerator;
 
     /// <summary>
