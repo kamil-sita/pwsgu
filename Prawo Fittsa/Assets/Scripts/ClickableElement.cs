@@ -30,7 +30,17 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
     /// <summary>
     /// default (max) position for the element. User when slide is equal to 1
     /// </summary>
-    private Vector3 defaultPos; //default (max) position for the element. User when slide is equal to 1
+    private Vector3 defaultPos;
+
+    /// <summary>
+    /// Indicates whether center was set
+    /// </summary>
+    private bool centerSet = false;
+
+    /// <summary>
+    /// Indicates whether defaultPos was set
+    /// </summary>
+    private bool defaultPosSet = false;
 
     /// <summary>
     /// coefficient that decides on how close the position is to either "center" or "defaultPos". Scales linearly, with slide = 0 being center and slide = 1 being defaultPos
@@ -75,7 +85,6 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
         }
 
         this.transform.localScale = defaultScale * value;
-
     }
 
     /// <summary>
@@ -85,6 +94,7 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
     public void SetDefault(Vector3 vector3)
     {
         this.defaultPos = new Vector3(vector3.x, vector3.y, vector3.z);
+        defaultPosSet = true;
         recalculatePosition();
     }
 
@@ -95,6 +105,7 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
     public void SetCenter(Vector3 vector3)
     {
         this.center = new Vector3(vector3.x, vector3.y, vector3.z);
+        centerSet = true;
         recalculatePosition();
     }
 
@@ -113,7 +124,7 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
     /// </summary>
     private void recalculatePosition()
     {
-        if (center == null || defaultPos == null)
+        if (!centerSet  || !defaultPosSet)
         {
             return; //not enough arguments yet
         }
