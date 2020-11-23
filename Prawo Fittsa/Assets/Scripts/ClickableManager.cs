@@ -5,6 +5,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
+/// Enum that describes available selection strategies
+/// </summary>
+public enum SelectionStrategy
+{
+    SELECT_RANDOM,
+    SELECT_OTHER_SIDE
+}
+
+
+/// <summary>
 /// Manages behavior and updates of managed ClickableElements
 /// </summary>
 public class ClickableManager : MonoBehaviour
@@ -15,14 +25,14 @@ public class ClickableManager : MonoBehaviour
     /// <summary>
     /// Hierarchy in which new, spawned objects will be put. Can also be used to independently add object for this Manager
     /// </summary>
-    public GameObject hierarchy; //todo if missing, generate it
+    public GameObject hierarchy; 
 
-    [Header("Selection strategy. 0 = random, 1 = other side")]
+    [Header("Selection strategy.")]
 
     /// <summary>
     /// Manages behavior and updates of managed ClickableElements
     /// </summary>
-    public int selectionStrategy = 0; //todo enum or lambda
+    public SelectionStrategy selectionStrategy = SelectionStrategy.SELECT_RANDOM;
 
 
     [Header("Cycles to change slide and size (0 = never)")]
@@ -295,12 +305,12 @@ public class ClickableManager : MonoBehaviour
     /// </summary>
     private void selectNext()
     {
-        if (selectionStrategy == 0)
+        if (selectionStrategy == SelectionStrategy.SELECT_RANDOM)
         {
             selectRandomElement();
         }
 
-        if (selectionStrategy == 1)
+        if (selectionStrategy == SelectionStrategy.SELECT_OTHER_SIDE)
         {
             selectOnTheOtherSide();
         }
