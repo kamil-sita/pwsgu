@@ -189,7 +189,14 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
         if (clicked)
         {
             clicked = false;
-            watcherScript.BallClicked(this.gameObject);
+            PointClickedData data = new PointClickedData(EventSystem.current, this);
+            ExecuteEvents.Execute<ClickableListener>(
+                                watcherScript.transform.gameObject,
+                                data,
+                                PointClickedData.clickedDelegate);
+
+
+            //watcherScript.BallClicked(this.gameObject);
         }
     }
 
