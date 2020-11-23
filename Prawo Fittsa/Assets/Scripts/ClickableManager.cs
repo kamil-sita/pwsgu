@@ -194,7 +194,6 @@ public class ClickableManager : MonoBehaviour, ClickableListener
         foreach (Transform child in hierarchy.transform)
         {
             GameObject gameObject = child.gameObject;
-            //todo check if is ClickableElement
             ClickableElement clickableElement = gameObject.GetComponent<ClickableElement>();
             clickableElement.SetScaleMultiplier(scale);
             clickableElement.Slide(slide);
