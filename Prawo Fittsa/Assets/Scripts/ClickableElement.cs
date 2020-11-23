@@ -83,11 +83,8 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler
             defaultScale = this.transform.localScale;
             defaultScalePresent = true;
         }
-        Debug.Log("aa:" + value);
 
         this.transform.localScale = defaultScale * value;
-
-        Debug.Log("aas:" + defaultScale * value);
     }
 
     /// <summary>
