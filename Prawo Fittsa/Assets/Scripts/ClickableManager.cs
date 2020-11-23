@@ -301,27 +301,22 @@ public class ClickableManager : MonoBehaviour, ClickableListener
         List<ClickableElement> possibleChildrenToSelect = new List<ClickableElement>();
         foreach (Transform child in hierarchy.transform)
         {
-            Debug.Log("Consideringa");
             GameObject gameObject = child.gameObject;
             if (gameObject != lastSelected)
             {
-                Debug.Log("Consideringb");
                 possibleChildrenToSelect.Add(gameObject.GetComponent<ClickableElement>());
             }
         }
 
         if (possibleChildrenToSelect.Count == 0)
         {
-            Debug.Log("Consideringc");
             selectGameObject(lastSelected.GetComponent<ClickableElement>());
             return;
         }
 
-        Debug.Log("Consideringd");
 
         ClickableElement toSelect = possibleChildrenToSelect[UnityEngine.Random.Range(0, possibleChildrenToSelect.Count)];
 
-        Debug.Log("Consideringd" + toSelect);
         selectGameObject(toSelect);
     }
 
@@ -332,16 +327,13 @@ public class ClickableManager : MonoBehaviour, ClickableListener
     {
         if (clickableElement == null)
         {
-            Debug.Log("Consideringda");
             return;
         }
 
         if (selectedGameObject != null)
         { 
-            Debug.Log("Consideringdb");
             Debug.Log("Selecting one game object without deselecting the others! This might lead to errors");
         }
-        Debug.Log("Consideringdbaa");
         //selected ball might not have this script selected as manager, if it was not created by ObjectGenerator. Because of that, we make sure it knows about this script
         clickableElement.SetManagerScript(this);
         selectedGameObject = clickableElement.transform.gameObject;
@@ -351,7 +343,5 @@ public class ClickableManager : MonoBehaviour, ClickableListener
                             null,
                             (handler, data) => clickableElement.SetSelectedMaterial()
                             );
-
-        Debug.Log("Consideringdbadsda");
     }
 }
