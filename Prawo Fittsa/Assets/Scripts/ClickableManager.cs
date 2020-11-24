@@ -199,9 +199,15 @@ public class ClickableManager : MonoBehaviour, ClickableListener
         foreach (Transform child in hierarchy.transform)
         {
             GameObject gameObject = child.gameObject;
-            ClickableElement clickableElement = gameObject.GetComponent<ClickableElement>();
-            clickableElement.SetScaleMultiplier(scale);
-            clickableElement.Slide(slide);
+            var clickableElement = gameObject.GetComponent<ClickableElement>() as ClickableElement;
+            if (clickableElement)
+            {
+                clickableElement.SetScaleMultiplier(scale);
+                clickableElement.Slide(slide);
+            } else
+            {
+                Debug.Log(gameObject + " does not contain ClickableElement component!");
+            }
         }
     }
 
@@ -257,7 +263,14 @@ public class ClickableManager : MonoBehaviour, ClickableListener
         {
             if (id == nextToSelect)
             {
-                selectGameObject(child.gameObject.GetComponent<ClickableElement>());
+                var clickableElement = child.gameObject.GetComponent<ClickableElement>() as ClickableElement;
+                if (clickableElement)
+                {
+                    selectGameObject(clickableElement);
+                } else
+                {
+                    Debug.Log(child + " does not contain component ClickableElement"); 
+                }
                 return;
             }
             id++;
@@ -304,13 +317,28 @@ public class ClickableManager : MonoBehaviour, ClickableListener
             GameObject gameObject = child.gameObject;
             if (gameObject != lastSelected)
             {
-                possibleChildrenToSelect.Add(gameObject.GetComponent<ClickableElement>());
+                var clickable = gameObject.GetComponent<ClickableElement>() as ClickableElement;
+                if (clickable)
+                {
+                    possibleChildrenToSelect.Add(clickable);
+                } else
+                {
+                    Debug.Log(gameObject + " does not contain component ClickableElement");
+                }
             }
         }
 
         if (possibleChildrenToSelect.Count == 0)
         {
-            selectGameObject(lastSelected.GetComponent<ClickableElement>());
+            var clickable = lastSelected.GetComponent<ClickableElement>() as ClickableElement;
+            if (clickable)
+            {
+                selectGameObject(clickable);
+            }
+            else
+            {
+                Debug.Log(gameObject + " does not contain component ClickableElement");
+            }
             return;
         }
 
