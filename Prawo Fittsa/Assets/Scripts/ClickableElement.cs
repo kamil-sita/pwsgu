@@ -133,7 +133,11 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler, MaterialCha
     /// </summary>
     public void SetSelectedMaterial()
     {
-        gameObject.GetComponent<MeshRenderer>().material = selectedMaterial;
+        var meshRender = gameObject.GetComponent<MeshRenderer>() as MeshRenderer;
+        if (meshRender)
+        {
+            meshRender.material = selectedMaterial;
+        }
     }
 
     /// <summary>
@@ -141,7 +145,11 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler, MaterialCha
     /// </summary>
     public void SetDefaultMaterial()
     {
-        gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
+        var meshRender = gameObject.GetComponent<MeshRenderer>() as MeshRenderer;
+        if (meshRender)
+        {
+            meshRender.material = defaultMaterial;
+        }
     }
 
     /// <summary>

@@ -158,7 +158,8 @@ public class ClickableManager : MonoBehaviour, ClickableListener
             ExecuteEvents.Execute<MaterialChangeListener>(
                                 clickedAtLastIteration.transform.gameObject,
                                 null,
-                                MaterialChangeData.materialChangeDefaultDelegate);
+                                (handler, data) => clickedAtLastIteration.SetDefaultMaterial()
+                                );
         }
     }
 
@@ -198,9 +199,15 @@ public class ClickableManager : MonoBehaviour, ClickableListener
         foreach (Transform child in hierarchy.transform)
         {
             GameObject gameObject = child.gameObject;
-            ClickableElement clickableElement = gameObject.GetComponent<ClickableElement>();
-            clickableElement.SetScaleMultiplier(scale);
-            clickableElement.Slide(slide);
+            var clickableElement = gameObject.GetComponent<ClickableElement>() as ClickableElement;
+            if (clickableElement)
+            {
+                clickableElement.SetScaleMultiplier(scale);
+                clickableElement.Slide(slide);
+            } else
+            {
+                Debug.Log(gameObject + " does not contain ClickableElement component!");
+            }
         }
     }
 
@@ -252,11 +259,18 @@ public class ClickableManager : MonoBehaviour, ClickableListener
 
         int id = 0;
 
-        foreach (Transform child in hierarchy.transform) //todo maybe children in hierarchy have some kind of index? Would be faster
+        foreach (Transform child in hierarchy.transform) //possibly replaceable by lookup, instead of iterating over it
         {
             if (id == nextToSelect)
             {
-                selectGameObject(child.gameObject);
+                var clickableElement = child.gameObject.GetComponent<ClickableElement>() as ClickableElement;
+                if (clickableElement)
+                {
+                    selectGameObject(clickableElement);
+                } else
+                {
+                    Debug.Log(child + " does not contain component ClickableElement"); 
+                }
                 return;
             }
             id++;
@@ -275,7 +289,7 @@ public class ClickableManager : MonoBehaviour, ClickableListener
 
         int id = 0;
 
-        foreach (Transform child in hierarchy.transform) //todo possibly could be optimized to something like IndexOf
+        foreach (Transform child in hierarchy.transform) //possibly replaceable by lookup, instead of iterating over it
         {
             GameObject gameObject = child.gameObject;
             if (gameObject != lastSelected)
@@ -296,41 +310,66 @@ public class ClickableManager : MonoBehaviour, ClickableListener
     /// </summary>
     private void selectRandomElement()
     {
-        //todo ensure at least two objects exists!
-        //todo ensure objects are of correct type!
 
-        List<GameObject> possibleChildrenToSelect = new List<GameObject>();
+        List<ClickableElement> possibleChildrenToSelect = new List<ClickableElement>();
         foreach (Transform child in hierarchy.transform)
         {
             GameObject gameObject = child.gameObject;
             if (gameObject != lastSelected)
             {
-                possibleChildrenToSelect.Add(gameObject);
+                var clickable = gameObject.GetComponent<ClickableElement>() as ClickableElement;
+                if (clickable)
+                {
+                    possibleChildrenToSelect.Add(clickable);
+                } else
+                {
+                    Debug.Log(gameObject + " does not contain component ClickableElement");
+                }
             }
         }
 
+        if (possibleChildrenToSelect.Count == 0)
+        {
+            var clickable = lastSelected.GetComponent<ClickableElement>() as ClickableElement;
+            if (clickable)
+            {
+                selectGameObject(clickable);
+            }
+            else
+            {
+                Debug.Log(gameObject + " does not contain component ClickableElement");
+            }
+            return;
+        }
 
-        GameObject toSelect = possibleChildrenToSelect[UnityEngine.Random.Range(0, possibleChildrenToSelect.Count)];
+
+        ClickableElement toSelect = possibleChildrenToSelect[UnityEngine.Random.Range(0, possibleChildrenToSelect.Count)];
+
         selectGameObject(toSelect);
     }
 
     /// <summary>
-    /// Select given game object for selection
+    /// Select given  clickable element for selection
     /// </summary>
-    /// <param name="gameObject"></param>
-    private void selectGameObject(GameObject gameObject)
+    private void selectGameObject(ClickableElement clickableElement)
     {
-        if (selectedGameObject != null)
+        if (clickableElement == null)
         {
+            return;
+        }
+
+        if (selectedGameObject != null)
+        { 
             Debug.Log("Selecting one game object without deselecting the others! This might lead to errors");
         }
         //selected ball might not have this script selected as manager, if it was not created by ObjectGenerator. Because of that, we make sure it knows about this script
-        gameObject.GetComponent<ClickableElement>().SetManagerScript(this);
-        selectedGameObject = gameObject;
-        lastSelected = gameObject;
+        clickableElement.SetManagerScript(this);
+        selectedGameObject = clickableElement.transform.gameObject;
+        lastSelected = clickableElement.transform.gameObject;
         ExecuteEvents.Execute<MaterialChangeListener>(
-                            gameObject,
+                            clickableElement.transform.gameObject,
                             null,
-                            MaterialChangeData.materialChangeSelectedDelegate);
+                            (handler, data) => clickableElement.SetSelectedMaterial()
+                            );
     }
 }
