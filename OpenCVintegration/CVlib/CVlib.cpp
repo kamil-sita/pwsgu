@@ -52,6 +52,6 @@ bool detectFace(long long length, int width, int height, unsigned char* data, fl
     }
 
 bool loadClassifier() {
-    faceClassifier.load("D:/studia-inf/PwSGU/opencv/build/etc/haarcascades/haarcascade_frontalface_default.xml");
+    faceClassifier.load("../../opencv/build/etc/haarcascades/haarcascade_frontalface_default.xml");
     return(1);
 }
