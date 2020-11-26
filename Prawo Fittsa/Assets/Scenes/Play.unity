@@ -541,7 +541,7 @@ MonoBehaviour:
   m_CancelButton: Cancel
   m_InputActionsPerSecond: 10
   m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
+  m_ForceModuleActive: 1
 --- !u!114 &832260085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1018,6 +1018,7 @@ GameObject:
   - component: {fileID: 1584249103}
   - component: {fileID: 1584249105}
   - component: {fileID: 1584249106}
+  - component: {fileID: 1584249107}
   m_Layer: 0
   m_Name: Watcher
   m_TagString: Untagged
@@ -1045,6 +1046,7 @@ MonoBehaviour:
   minSize: 0.5
   maxSize: 3
   objectGenerator: {fileID: 1584249105}
+  lineDrawer: {fileID: 0}
 --- !u!4 &1584249104
 Transform:
   m_ObjectHideFlags: 0
@@ -1096,6 +1098,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shader: {fileID: 7200000, guid: aacbbd443af1ff04dbbc0bef16331a52, type: 3}
+--- !u!114 &1584249107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1584249102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acd4c4abaa976194f90dad0d8f13c507, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1724693924
 GameObject:
   m_ObjectHideFlags: 0
