@@ -1045,6 +1045,7 @@ MonoBehaviour:
   minSize: 0.5
   maxSize: 3
   objectGenerator: {fileID: 1584249105}
+  lineDrawer: {fileID: 1584249106}
 --- !u!4 &1584249104
 Transform:
   m_ObjectHideFlags: 0
