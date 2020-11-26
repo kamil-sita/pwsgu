@@ -59,8 +59,9 @@ public class ClickableManager : MonoBehaviour, ClickableListener
     /// </summary>
     private int clickedCycle = 0;
 
-    private LineDrawer lineDrawer = new LineDrawer(); 
-
+    //private LineDrawer lineDrawer = new LineDrawer(); 
+    [Header("Line Drawer class")]
+    public LineDrawer lineDrawer;
 
 
     /// <summary>

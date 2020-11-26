@@ -1,0 +1,19 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel ComputeAmplitude 
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+struct LinePosition
+{
+    float3 startPos;
+    float3 endPos;
+    float amplitude;
+};
+RWStructuredBuffer<LinePosition> linePositionBuffer;
+
+//RWBuffer<LinePosition> dataBuffer;
+[numthreads(16,1,1)]
+void ComputeAmplitude (uint3 id : SV_DispatchThreadID)
+{
+    linePositionBuffer[id.x].amplitude =  length(linePositionBuffer[id.x].endPos - linePositionBuffer[id.x].startPos);
+     
+}
