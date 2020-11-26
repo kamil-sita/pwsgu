@@ -897,7 +897,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultMaterial: {fileID: 2100000, guid: 70a3fd4f1ddf7444cb0573ae7ce04da4, type: 2}
-  selectedMaterial: {fileID: 2100000, guid: f7ed41cbc7abe6c47b79bc41678fd3ec, type: 2}
+  selectedMaterial: {fileID: 2100000, guid: 70a3fd4f1ddf7444cb0573ae7ce04da4, type: 2}
 --- !u!1 &1353988740
 GameObject:
   m_ObjectHideFlags: 0
@@ -945,7 +945,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultMaterial: {fileID: 2100000, guid: aa34a9d708bf7c141a84226451f093a1, type: 2}
-  selectedMaterial: {fileID: 2100000, guid: f7ed41cbc7abe6c47b79bc41678fd3ec, type: 2}
+  selectedMaterial: {fileID: 2100000, guid: aa34a9d708bf7c141a84226451f093a1, type: 2}
 --- !u!135 &1353988743
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -977,7 +977,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: aa34a9d708bf7c141a84226451f093a1, type: 2}
+  - {fileID: 2100000, guid: 274afb072470b264ea01d2aea6118f4c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

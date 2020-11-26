@@ -138,6 +138,7 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler, MaterialCha
         {
             meshRender.material = selectedMaterial;
         }
+        meshRender.material.SetInt("IsHighlighted", 1);
     }
 
     /// <summary>
@@ -150,6 +151,7 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler, MaterialCha
         {
             meshRender.material = defaultMaterial;
         }
+        meshRender.material.SetInt("IsHighlighted", 0);
     }
 
     /// <summary>
