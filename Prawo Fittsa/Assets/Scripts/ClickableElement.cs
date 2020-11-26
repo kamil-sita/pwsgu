@@ -10,18 +10,6 @@ using UnityEngine.EventSystems;
 /// </summary>
 public class ClickableElement : MonoBehaviour, IPointerClickHandler, MaterialChangeListener
 {
-
-    [Header("Default material, for unselected object")]
-    ///Default material, used if object is not selected for being clicked
-    public Material defaultMaterial;
-
-
-    [Header("Material for selected object")]
-    /// <summary>
-    /// Material used when object is selected
-    /// </summary>
-    public Material selectedMaterial;
-
     /// <summary>
     /// center position - used when slide is equal to 0
     /// </summary>
@@ -136,7 +124,6 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler, MaterialCha
         var meshRender = gameObject.GetComponent<MeshRenderer>() as MeshRenderer;
         if (meshRender)
         {
-            meshRender.material = selectedMaterial;
             meshRender.material.SetInt("IsHighlighted", 1);
         }  
     }
@@ -149,7 +136,6 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler, MaterialCha
         var meshRender = gameObject.GetComponent<MeshRenderer>() as MeshRenderer;
         if (meshRender)
         {
-            meshRender.material = defaultMaterial;
             meshRender.material.SetInt("IsHighlighted", 0);
         }     
     }
@@ -180,14 +166,6 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler, MaterialCha
     /// </summary>
     void Start()
     {
-        if (defaultMaterial == null)
-        {
-            Debug.Log("Default material is missing");
-        }
-        if (selectedMaterial == null)
-        {
-            Debug.Log("Selected material is missing");
-        }
     }
 
     /// <summary>
