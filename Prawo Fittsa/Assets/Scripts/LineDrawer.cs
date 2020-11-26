@@ -11,7 +11,13 @@ public class LineDrawer : MonoBehaviour
     private LineRenderer lineRenderer;
     private float lineWidth = 0.008f;
     GameObject line;
-
+    struct LinePosition
+    {
+        public Vector3 startPos;
+        public Vector3 endPos;
+        public float amplitude;
+    }
+    public ComputeShader shader;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +36,7 @@ public class LineDrawer : MonoBehaviour
         line.name = "Line";
         if (startPosition == null)
             startPosition = GetMouseCameraPoint();
+        
         else
         {
             endPosition = GetMouseCameraPoint();
@@ -56,7 +63,17 @@ public class LineDrawer : MonoBehaviour
 
     public void countAmplitude()
     {
-         amplitude = (endPosition - (Vector3)startPosition).magnitude;
+        LinePosition[] inputLine = new LinePosition[1];
+        inputLine[0].startPos = (Vector3)startPosition;
+        inputLine[0].endPos = endPosition;
+        LinePosition[] outputLine = new LinePosition[1];
+        ComputeBuffer buffer = new ComputeBuffer(1, 28);
+        buffer.SetData(inputLine);
+        int kernel = shader.FindKernel("ComputeAmplitude");
+        shader.SetBuffer(kernel, "linePositionBuffer", buffer);
+        shader.Dispatch(kernel, 1, 1, 1);
+        buffer.GetData(outputLine);
+        amplitude = outputLine[0].amplitude;
     }
 
     private Vector3 GetMouseCameraPoint()
