@@ -6,26 +6,32 @@ using UnityEngine.UI;
 public class MenuController : MonoBehaviour
 {
     private GameObject MenuPanel, OptionPanel;
-    private Button PlayBtn, OptionsBtn, ExitBtn, ReturnBtn;
+    private Button PlayBtn, DetectFaceBtn, OptionsBtn, ExitBtn, ReturnBtn;
     private void Awake() {
         PlayBtn = GameObject.Find("Play_Btn").GetComponent<Button>();
+        DetectFaceBtn = GameObject.Find("FaceDetect_Btn").GetComponent<Button>();
         OptionsBtn = GameObject.Find("Option_Btn").GetComponent<Button>();
         ExitBtn = GameObject.Find("Exit_Btn").GetComponent<Button>();
         ReturnBtn = GameObject.Find("Return_Btn").GetComponent<Button>();
         MenuPanel = GameObject.Find("Main_Panel");
         OptionPanel = GameObject.Find("Options_Panel");
+
     }
 
     private void Start() {
         CurrActivePanel(true, false);
-        PlayBtn.onClick.AddListener(LoadScene);
+        PlayBtn.onClick.AddListener(LoadMarblesScene);
+        DetectFaceBtn.onClick.AddListener(LoadFaceScene);
         OptionsBtn.onClick.AddListener(setActiveOptionsPanel);
         ExitBtn.onClick.AddListener(ExitApplication);
         ReturnBtn.onClick.AddListener(setActiveMenuPanel);
     }
 
-    private void LoadScene() {
+    private void LoadMarblesScene() {
         SceneLoader.Load(SceneLoader.Scene.Play);
+    }
+    private void LoadFaceScene() {
+        SceneLoader.Load(SceneLoader.Scene.FaceDetect);
     }
 
     private void ExitApplication() {
