@@ -10,7 +10,6 @@ struct LinePosition
 };
 RWStructuredBuffer<LinePosition> linePositionBuffer;
 
-//RWBuffer<LinePosition> dataBuffer;
 [numthreads(16,1,1)]
 void ComputeAmplitude (uint3 id : SV_DispatchThreadID)
 {

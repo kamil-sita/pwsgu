@@ -59,9 +59,16 @@ public class ClickableManager : MonoBehaviour, ClickableListener
     /// </summary>
     private int clickedCycle = 0;
 
-    //private LineDrawer lineDrawer = new LineDrawer(); 
+    /// <summary>
+    /// Draws line and computes amplitude between balls
+    /// </summary>
     [Header("Line Drawer class")]
     public LineDrawer lineDrawer;
+
+    /// <summary>
+    /// Used for computing ball area, contains object mesh
+    /// </summary>
+    public static Mesh viewedModel;
 
 
     /// <summary>
@@ -154,6 +161,10 @@ public class ClickableManager : MonoBehaviour, ClickableListener
         {
             lineDrawer.removeLine();
             lineDrawer.drawLine();
+            MeshFilter viewedModelFilter = (MeshFilter)selectedGameObject.GetComponent("MeshFilter");
+            viewedModel = viewedModelFilter.sharedMesh;
+            float objectArea = (CalculateSurfaceArea(viewedModel, selectedGameObject.transform.localScale)) / CalculateCameraObjectDistance(); //
+            Debug.Log("Object area: " + objectArea);
             cycleIteration();
             selectedGameObject = null;
             ExecuteEvents.Execute<MaterialChangeListener>(
@@ -372,5 +383,40 @@ public class ClickableManager : MonoBehaviour, ClickableListener
                             null,
                             (handler, data) => clickableElement.SetSelectedMaterial()
                             );
+    }
+    /// <summary>
+    /// Calculates area of the selected ball
+    /// </summary>
+    /// <param name="mesh">ball mesh</param>
+    /// <param name="scale">sclae modifier</param>    
+    /// <returns>ball area, which is computed using triangles from mesh</returns>
+    float CalculateSurfaceArea(Mesh mesh, Vector3 scale)
+    {
+        var triangles = mesh.triangles;
+        var vertices = mesh.vertices;
+
+        double sum = 0.0;
+
+        for (int i = 0; i < triangles.Length; i += 3)
+        {
+            Vector3 corner = vertices[triangles[i]];
+            Vector3 a = vertices[triangles[i + 1]] - corner;
+            Vector3 b = vertices[triangles[i + 2]] - corner;
+
+            sum += Vector3.Cross(a, b).magnitude;
+        }
+
+        
+        return (float)(sum / 2.0) * scale.x;
+    }
+    /// <summary>
+    /// Calculates distance between camera and the clicked object
+    /// </summary> 
+    /// <returns>distance between camera and the object</returns>
+    float CalculateCameraObjectDistance()
+    {
+        Vector3 heading = selectedGameObject.transform.position - Camera.main.transform.position;
+        float distance = Vector3.Dot(heading, Camera.main.transform.forward);
+        return distance;
     }
 }
