@@ -1,1 +1,0 @@
-Tekstury są z textures.com, ale nie udostępniajcie ich na zewnątrz, bo mogą mnie powiesić
