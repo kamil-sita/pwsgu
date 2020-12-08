@@ -70,6 +70,21 @@ public class ClickableManager : MonoBehaviour, ClickableListener
     /// </summary>
     public static Mesh viewedModel;
 
+    /// <summary>
+    /// List of amplitudes (distances between items clicked)
+    /// </summary>
+    private List<float> amplitudes = new List<float>();
+    
+    /// <summary>
+    /// List of areas (areas of clicked objects)
+    /// </summary>
+    private List<float> areas = new List<float>();
+    
+    /// <summary>
+    /// First area is ignored, this flag is true, and on first calculation of the area, it is changed
+    /// </summary>
+    private bool isFirstArea = true;
+
 
     /// <summary>
     /// Start is called before the first frame update
@@ -156,6 +171,7 @@ public class ClickableManager : MonoBehaviour, ClickableListener
     /// <param name="clickable"></param>
     public void ObjectClicked(PointClickedData clickable)
     {
+        Debug.Log(amplitudes.Count + ", " + areas.Count);
         var clickedAtLastIteration = clickable.selectedElement;
         if (clickedAtLastIteration.transform.gameObject == selectedGameObject) //clicked element was the one that we looked for
         {
@@ -165,6 +181,14 @@ public class ClickableManager : MonoBehaviour, ClickableListener
             viewedModel = viewedModelFilter.sharedMesh;
             float objectArea = (CalculateSurfaceArea(viewedModel, selectedGameObject.transform.localScale)) / CalculateCameraObjectDistance(); //
             Debug.Log("Object area: " + objectArea);
+            //we are only interested in object area, if it is not the first one calculated (we are interested in target, not source object)
+            if (isFirstArea)
+            {
+                isFirstArea = false;
+            } else
+            {
+                areas.Add(objectArea);
+            }
             cycleIteration();
             selectedGameObject = null;
             ExecuteEvents.Execute<MaterialChangeListener>(
@@ -418,5 +442,32 @@ public class ClickableManager : MonoBehaviour, ClickableListener
         Vector3 heading = selectedGameObject.transform.position - Camera.main.transform.position;
         float distance = Vector3.Dot(heading, Camera.main.transform.forward);
         return distance;
+    }
+
+    /// <summary>
+    /// Reports amplitude to this ClickableManager
+    /// </summary>
+    /// <param name="amplitude"></param>
+    public void ReportAmplitude(float amplitude)
+    {
+        amplitudes.Add(amplitude);
+    }
+
+    /// <summary>
+    /// Returns list of areas, as calculated by this ClickableManager. First area is automatically ignored
+    /// </summary>
+    /// <returns></returns>
+    public List<float> getAreas()
+    {
+        return areas;
+    }
+
+    /// <summary>
+    /// Returns list of amplitudes, as reported to this ClickableManager
+    /// </summary>
+    /// <returns></returns>
+    public List<float> getAmplitudes()
+    {
+        return amplitudes;
     }
 }
