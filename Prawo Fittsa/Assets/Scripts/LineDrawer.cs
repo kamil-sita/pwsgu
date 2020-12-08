@@ -7,6 +7,13 @@ using UnityEngine;
 /// </summary>
 public class LineDrawer : MonoBehaviour
 {
+
+    /// <summary>
+    /// 
+    /// </summary>
+    [Header("Clickable Manager")]
+    public ClickableManager manager; 
+
     /// <summary>
     /// Contains computed amplitude between two objects
     /// </summary>    
@@ -64,8 +71,9 @@ public class LineDrawer : MonoBehaviour
             endPosition = GetMouseCameraPoint();
             renderLine();
             countAmplitude();
-            Debug.Log("amplituda =  " + amplitude.ToString());
+            Debug.Log("amplitude =  " + amplitude.ToString());
             startPosition = endPosition;
+            manager.ReportAmplitude(amplitude);
         }
     }
     /// <summary>
