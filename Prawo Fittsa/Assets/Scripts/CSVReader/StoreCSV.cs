@@ -19,7 +19,7 @@ public class StoreCSV
         }
 
         using (var writer = new StreamWriter(Application.streamingAssetsPath + "\\fittsData.csv"))
-        using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) {
+        using (var csv = new CsvWriter(writer, CultureInfo.InstalledUICulture)) {
 
             csv.WriteRecords(fittsList);
         }

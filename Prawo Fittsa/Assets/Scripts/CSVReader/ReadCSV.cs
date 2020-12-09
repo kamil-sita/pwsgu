@@ -30,7 +30,7 @@ public static class ReadCSV
    public static List<FittsData> ReadData()
    {
        using (var reader = new StreamReader(Application.streamingAssetsPath + "\\fittsData.csv"))
-        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture)) {
+        using (var csv = new CsvReader(reader, CultureInfo.InstalledUICulture)) {
 
             return csv.GetRecords<FittsData>().ToList();
 
