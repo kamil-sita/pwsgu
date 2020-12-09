@@ -8,6 +8,11 @@ using UnityEngine;
 
 public class StoreCSV 
 {
+    /// <summary>
+    /// Save list of areas and ampitudes to fittsData file
+    /// </summary>
+    /// <param name="areas"></param>
+    /// <param name="amplitudes"></param>
     public static void saveCSV(List<float> areas, List<float> amplitudes)
     {
         var fittsList = new List<FittsData>();

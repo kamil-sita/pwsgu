@@ -22,12 +22,18 @@ public class LoadMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
             SceneLoader.Load(SceneLoader.Scene.MainMenu);
         }
     }
-
+    /// <summary>
+    /// Check whether mouse button is pressed down
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerDown(PointerEventData eventData)
     {
         buttonPressed = true;
     }
-
+    /// <summary>
+    /// Check whether mouse button is pressed up
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerUp(PointerEventData eventData)
     {
         buttonPressed = false;
