@@ -4,9 +4,16 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class LoadMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
-    [SerializeField] private Button returnButton;
+public class SaveAndLoadMenu : MonoBehaviour {
     private bool buttonPressed;
+    /// <summary>
+    /// Change scene to main menu
+    /// </summary>
+    public void InvokeChange()
+    {
+        buttonPressed = true;
+    }
+
     void Start()
     {
         buttonPressed = false;
@@ -80,21 +87,5 @@ public class LoadMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
             ((count * sumxsquared) - (sumx * sumx));
 
         return new Vector2(a, b);
-    }
-    /// <summary>
-    /// Check whether mouse button is pressed down
-    /// </summary>
-    /// <param name="eventData"></param>
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        buttonPressed = true;
-    }
-    /// <summary>
-    /// Check whether mouse button is pressed up
-    /// </summary>
-    /// <param name="eventData"></param>
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        buttonPressed = false;
     }
 }
