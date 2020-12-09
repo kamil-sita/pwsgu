@@ -11,7 +11,7 @@ public class MenuController : MonoBehaviour
     [SerializeField]
     private GameObject MenuPanel, OptionPanel;
     [SerializeField]
-    private Button PlayBtn, DetectFaceBtn, OptionsBtn, ExitBtn, ReturnBtn;
+    private Button PlayBtn, DetectFaceBtn, OptionsBtn, ExitBtn, ReturnBtn, PlayAroundBtn;
     /// <summary>
     /// Adding listeners on buttons
     /// </summary>
