@@ -3,21 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Class for managing menu
+/// </summary>
 public class MenuController : MonoBehaviour
 {
+    [SerializeField]
     private GameObject MenuPanel, OptionPanel;
+    [SerializeField]
     private Button PlayBtn, DetectFaceBtn, OptionsBtn, ExitBtn, ReturnBtn;
-    private void Awake() {
-        PlayBtn = GameObject.Find("Play_Btn").GetComponent<Button>();
-        DetectFaceBtn = GameObject.Find("FaceDetect_Btn").GetComponent<Button>();
-        OptionsBtn = GameObject.Find("Option_Btn").GetComponent<Button>();
-        ExitBtn = GameObject.Find("Exit_Btn").GetComponent<Button>();
-        ReturnBtn = GameObject.Find("Return_Btn").GetComponent<Button>();
-        MenuPanel = GameObject.Find("Main_Panel");
-        OptionPanel = GameObject.Find("Options_Panel");
-
-    }
-
+    /// <summary>
+    /// Adding listeners on buttons
+    /// </summary>
     private void Start() {
         CurrActivePanel(true, false);
         PlayBtn.onClick.AddListener(LoadMarblesScene);
@@ -26,14 +23,21 @@ public class MenuController : MonoBehaviour
         ExitBtn.onClick.AddListener(ExitApplication);
         ReturnBtn.onClick.AddListener(setActiveMenuPanel);
     }
-
+    /// <summary>
+    /// Loading Marble Scenes
+    /// </summary>
     private void LoadMarblesScene() {
         SceneLoader.Load(SceneLoader.Scene.Play);
     }
+    /// <summary>
+    /// Loading Face Scenes
+    /// </summary>
     private void LoadFaceScene() {
         SceneLoader.Load(SceneLoader.Scene.FaceDetect);
     }
-
+    /// <summary>
+    /// Exit app
+    /// </summary>
     private void ExitApplication() {
     #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
@@ -41,12 +45,23 @@ public class MenuController : MonoBehaviour
          Application.Quit();
      #endif
     }
+    /// <summary>
+    ///  Activate options panel
+    /// </summary>
     private void setActiveOptionsPanel() {
         CurrActivePanel();
     }
+    /// <summary>
+    /// Activate menu panel
+    /// </summary>
     private void setActiveMenuPanel() {
         CurrActivePanel(true, false);
     }
+    /// <summary>
+    /// Currently active panel
+    /// </summary>
+    /// <param name="menuPanel"></param>
+    /// <param name="optionPanel"></param>
     private void CurrActivePanel(bool menuPanel = false, bool optionPanel = true) {
         MenuPanel.SetActive(menuPanel);
         OptionPanel.SetActive(optionPanel);

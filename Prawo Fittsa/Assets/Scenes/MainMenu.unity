@@ -2813,7 +2813,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 762768381}
-  - component: {fileID: 762768382}
   m_Layer: 0
   m_Name: Main_Panel
   m_TagString: Untagged
@@ -2842,18 +2841,6 @@ RectTransform:
   m_AnchoredPosition: {x: 13, y: -19}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &762768382
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 762768380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07d4f821cdb377448826b4506a6cbcb6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &766283299
 GameObject:
   m_ObjectHideFlags: 0
@@ -4568,6 +4555,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07d4f821cdb377448826b4506a6cbcb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MenuPanel: {fileID: 762768380}
+  OptionPanel: {fileID: 396987122}
+  PlayBtn: {fileID: 1494081036}
+  DetectFaceBtn: {fileID: 2143915475}
+  OptionsBtn: {fileID: 1802857791}
+  ExitBtn: {fileID: 348360540}
+  ReturnBtn: {fileID: 1164477432}
 --- !u!1 &1232122525
 GameObject:
   m_ObjectHideFlags: 0
