@@ -11,6 +11,7 @@ public static class SceneLoader
         Play,
         FaceDetect,
         Exit,
+        Graphs,
     }
 
     public static void Load(Scene scene)
