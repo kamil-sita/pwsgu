@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Graphs.unity
     guid: aa698428ec8243c4389e9d0d44512439
+  - enabled: 1
+    path: Assets/Scenes/PlayAround.unity
+    guid: 4c769c4fc815d92459f3df3b8699271d
   m_configObjects: {}
