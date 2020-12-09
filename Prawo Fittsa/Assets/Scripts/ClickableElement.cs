@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Microsoft.MixedReality.Toolkit.Input;
 
 
 /// <summary>
 /// Represents a clickable element, is related to ClickableManager
 /// </summary>
-public class ClickableElement : MonoBehaviour, IPointerClickHandler, MaterialChangeListener
+public class ClickableElement : MonoBehaviour, IPointerClickHandler, MaterialChangeListener, IMixedRealityPointerHandler
 {
     /// <summary>
     /// center position - used when slide is equal to 0
@@ -175,5 +176,24 @@ public class ClickableElement : MonoBehaviour, IPointerClickHandler, MaterialCha
     {
     }
 
+    public void OnPointerDown(MixedRealityPointerEventData eventData)
+    {
+    }
 
+    public void OnPointerDragged(MixedRealityPointerEventData eventData)
+    {
+    }
+
+    public void OnPointerUp(MixedRealityPointerEventData eventData)
+    {
+    }
+
+    public void OnPointerClicked(MixedRealityPointerEventData eventData)
+    {
+        PointClickedData data = new PointClickedData(EventSystem.current, this);
+        ExecuteEvents.Execute<ClickableListener>(
+                            watcherScript.transform.gameObject,
+                            data,
+                            PointClickedData.clickedDelegate);
+    }
 }

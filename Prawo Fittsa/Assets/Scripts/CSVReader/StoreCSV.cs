@@ -8,23 +8,22 @@ using UnityEngine;
 
 public class StoreCSV 
 {
-    /// <summary>
+    public static void saveCSV(List<float> areas, List<float> amplitudes, List<float> times, List<float> iods)
     /// Save list of areas and ampitudes to fittsData file
     /// </summary>
     /// <param name="areas"></param>
     /// <param name="amplitudes"></param>
-    public static void saveCSV(List<float> areas, List<float> amplitudes)
     {
         var fittsList = new List<FittsData>();
         for (var i = 0; i < areas.Count; ++i)
         {
             if (amplitudes.Count < i) continue;
-            var fittsElement = new FittsData(areas[i],amplitudes[i]);
+            var fittsElement = new FittsData(areas[i],amplitudes[i], times[i], iods[i]);
             fittsList.Add(fittsElement);
         }
 
         using (var writer = new StreamWriter(Application.streamingAssetsPath + "\\fittsData.csv"))
-        using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) {
+        using (var csv = new CsvWriter(writer, CultureInfo.InstalledUICulture)) {
 
             csv.WriteRecords(fittsList);
         }
