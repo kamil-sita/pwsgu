@@ -4,15 +4,22 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class LoadMenuFinal : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class LoadMenuFinal : MonoBehaviour
 {
-    [SerializeField] private Button returnButton;
     private bool buttonPressed;
+
+    /// <summary>
+    /// Change scene to main menu
+    /// </summary>
+    public void InvokeChange() 
+    {
+        buttonPressed = true;
+    }
+
     void Start()
     {
         buttonPressed = false;
     }
-
 
     // Update is called once per frame
     void Update()
@@ -23,22 +30,4 @@ public class LoadMenuFinal : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             SceneLoader.Load(SceneLoader.Scene.MainMenu);
         }
     }
-
-    /// <summary>
-    /// Check whether mouse button is pressed down
-    /// </summary>
-    /// <param name="eventData"></param>
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        buttonPressed = true;
-    }
-    /// <summary>
-    /// Check whether mouse button is pressed up
-    /// </summary>
-    /// <param name="eventData"></param>
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        buttonPressed = false;
-    }
-
 }

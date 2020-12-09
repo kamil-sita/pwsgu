@@ -24,8 +24,8 @@ public class GraphingScript : MonoBehaviour
             putAt(0, i * 0.5f, template2);
         }
 
-        List<float> x = LoadMenu.id;
-        List<float> y = LoadMenu.times;
+        List<float> x = SaveAndLoadMenu.id;
+        List<float> y = SaveAndLoadMenu.times;
 
         if (x == null)
         {
@@ -39,8 +39,8 @@ public class GraphingScript : MonoBehaviour
             putAt(x[i], y[i], template1);
         }
 
-        float b = LoadMenu.a;
-        float a = LoadMenu.b;
+        float b = SaveAndLoadMenu.a;
+        float a = SaveAndLoadMenu.b;
         float max = 10;
 
         lineRenderer.SetVertexCount(2);

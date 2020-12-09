@@ -905,6 +905,11 @@ PrefabInstance:
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: InvokeChange
       objectReference: {fileID: 0}
+    - target: {fileID: 6554677434623402515, guid: 4d38efee1c3014a44aa09d1c7d73adfb,
+        type: 3}
+      propertyPath: iconQuadTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 85835ae0b6c3c1c418a57400fcbb788c, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d38efee1c3014a44aa09d1c7d73adfb, type: 3}
 --- !u!1 &1304384019
@@ -1237,6 +1242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b00648950f2baa4c913ddee6748a2ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  returnButton: {fileID: 0}
 --- !u!1 &1724693924
 GameObject:
   m_ObjectHideFlags: 0
