@@ -1,18 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Net.Http.Headers;
+using CsvHelper;
 using UnityEngine;
 
-public class StoreCSV : MonoBehaviour
+public class StoreCSV 
 {
-    // Start is called before the first frame update
-    void Start()
+    public static void saveCSV(List<float> areas, List<float> amplitudes)
     {
-        
-    }
+        var fittsList = new List<FittsData>();
+        for (var i = 0; i < areas.Count; ++i)
+        {
+            if (amplitudes.Count < i) continue;
+            var fittsElement = new FittsData(areas[i],amplitudes[i]);
+            fittsList.Add(fittsElement);
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        using (var writer = new StreamWriter(Application.streamingAssetsPath + "\\fittsData.csv"))
+        using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) {
+
+            csv.WriteRecords(fittsList);
+        }
     }
 }
