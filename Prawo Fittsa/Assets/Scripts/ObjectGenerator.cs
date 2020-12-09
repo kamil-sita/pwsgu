@@ -8,7 +8,8 @@ using UnityEngine;
 public enum GenerationStrategy
 {
     GENERATE_RANDOMLY,
-    GENERATE_CIRCLE
+    GENERATE_CIRCLE,
+    GENERATE_SPHERE
 }
 
 /// <summary>
@@ -120,6 +121,31 @@ public class ObjectGenerator : IObjectGenerator
             for (int i = 0; i < countToGenerate; i++)
             {
                 putObjectAt(new Vector3(UnityEngine.Random.Range(xMin, xMax), UnityEngine.Random.Range(yMin, yMax), UnityEngine.Random.Range(zMin, zMax)));
+            }
+        }
+        if (generationStrategy == GenerationStrategy.GENERATE_SPHERE)
+        {
+
+            for (int i = 0; i < countToGenerate; i++)
+            {
+                float theta = 2 * Mathf.PI * UnityEngine.Random.Range(0f, 1f);
+                float phi = Mathf.Acos(1 - 2 * UnityEngine.Random.Range(0f, 1f));
+
+                float x = Mathf.Sin(phi) * Mathf.Cos(theta);
+                float y = Mathf.Sin(phi) * Mathf.Sin(theta);
+                float z = Mathf.Cos(phi);
+
+                Debug.Log("theta:" + theta);
+                Debug.Log("phi:" + phi);
+                Debug.Log("x:" + x);
+                Debug.Log("y:" + y);
+                Debug.Log("z:" + z);
+
+                x = (x + 1) / 2.0f * (xMax - xMin) + xMin;
+                y = (y + 1) / 2.0f * (yMax - yMin) + yMin;
+                z = (z + 1) / 2.0f * (zMax - zMin) + zMin;
+
+                putObjectAt(new Vector3(x, y, z));
             }
         }
     }

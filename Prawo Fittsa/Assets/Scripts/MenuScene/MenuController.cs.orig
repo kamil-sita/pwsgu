@@ -10,11 +10,27 @@ public class MenuController : MonoBehaviour
 {
     [SerializeField]
     private GameObject MenuPanel, OptionPanel;
+<<<<<<< HEAD
     [SerializeField]
     private Button PlayBtn, DetectFaceBtn, OptionsBtn, ExitBtn, ReturnBtn;
     /// <summary>
     /// Adding listeners on buttons
     /// </summary>
+=======
+    private Button PlayBtn, DetectFaceBtn, OptionsBtn, ExitBtn, ReturnBtn, PlayAroundBtn;
+    private void Awake() {
+        PlayBtn = GameObject.Find("Play_Btn").GetComponent<Button>();
+        PlayAroundBtn = GameObject.Find("Play_Around").GetComponent<Button>();
+        DetectFaceBtn = GameObject.Find("FaceDetect_Btn").GetComponent<Button>();
+        OptionsBtn = GameObject.Find("Option_Btn").GetComponent<Button>();
+        ExitBtn = GameObject.Find("Exit_Btn").GetComponent<Button>();
+        ReturnBtn = GameObject.Find("Return_Btn").GetComponent<Button>();
+        MenuPanel = GameObject.Find("Main_Panel");
+        OptionPanel = GameObject.Find("Options_Panel");
+
+    }
+
+>>>>>>> 8ba16991206fc62d16ca6f23afe6d5c8f6395182
     private void Start() {
         CurrActivePanel(true, false);
         PlayBtn.onClick.AddListener(LoadMarblesScene);
@@ -30,13 +46,16 @@ public class MenuController : MonoBehaviour
     private void LoadMarblesScene() {
         SceneLoader.Load(SceneLoader.Scene.Play);
     }
+<<<<<<< HEAD
+    /// <summary>
+    /// Loading Face Scenes
+    /// </summary>
+=======
     private void LoadPlayAroundScene()
     {
         SceneLoader.Load(SceneLoader.Scene.PlayAround);
     }
-    /// <summary>
-    /// Loading Face Scenes
-    /// </summary>
+>>>>>>> 8ba16991206fc62d16ca6f23afe6d5c8f6395182
     private void LoadFaceScene() {
         SceneLoader.Load(SceneLoader.Scene.FaceDetect);
     }

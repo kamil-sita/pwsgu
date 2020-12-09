@@ -9,6 +9,7 @@ public static class SceneLoader
     {
         MainMenu,
         Play,
+        PlayAround,
         FaceDetect,
         Exit,
         Graphs,
