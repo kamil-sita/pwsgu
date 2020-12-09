@@ -5,6 +5,17 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class SaveAndLoadMenu : MonoBehaviour {
+
+    public static List<float> areas { get; internal set; }
+    public static List<float> amplitudes { get; internal set; }
+    public static List<float> times { get; internal set; }
+    public static List<float> id { get; internal set; }
+    public static float a { get; internal set; }
+    public static float b { get; internal set; }
+
+
+
+    [SerializeField] private Button returnButton;
     private bool buttonPressed;
     /// <summary>
     /// Change scene to main menu
@@ -27,12 +38,12 @@ public class SaveAndLoadMenu : MonoBehaviour {
             buttonPressed = false;
 
             ClickableManager cm = GameObject.Find("Watcher").GetComponent<ClickableManager>();
-            List<float> areas = cm.getAreas();
-            List<float> amplitudes = cm.getAmplitudes();
-            List<float> times = cm.getTimes();
+            areas = cm.getAreas();
+            amplitudes = cm.getAmplitudes();
+            times = cm.getTimes();
 
             //linear regression
-            List<float> id = new List<float>();
+            id = new List<float>();
 
             for (int i = 0; i < areas.Count; i++)
             {
@@ -48,6 +59,9 @@ public class SaveAndLoadMenu : MonoBehaviour {
             Debug.Log("A:" + coords.x);
             Debug.Log("B:" + coords.y);
 
+            a = coords.x;
+            b = coords.y;
+
 
             //saving csv data
             StoreCSV.saveCSV(
@@ -56,7 +70,7 @@ public class SaveAndLoadMenu : MonoBehaviour {
                 times,
                 id
             );
-            SceneLoader.Load(SceneLoader.Scene.MainMenu);
+            SceneLoader.Load(SceneLoader.Scene.Graphs);
         }
     }
 
@@ -87,5 +101,21 @@ public class SaveAndLoadMenu : MonoBehaviour {
             ((count * sumxsquared) - (sumx * sumx));
 
         return new Vector2(a, b);
+    }
+    /// <summary>
+    /// Check whether mouse button is pressed down
+    /// </summary>
+    /// <param name="eventData"></param>
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        buttonPressed = true;
+    }
+    /// <summary>
+    /// Check whether mouse button is pressed up
+    /// </summary>
+    /// <param name="eventData"></param>
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        buttonPressed = false;
     }
 }
