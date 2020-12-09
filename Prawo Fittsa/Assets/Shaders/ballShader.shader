@@ -49,6 +49,12 @@
                 half lightMod = max(0, dot(worldNormal, _WorldSpaceLightPos0.xyz));
 
                 o.color =  lightMod * _LightColor0  * o.color;
+
+                if (IsHighlighted == 1)
+                {
+                    o.color.xyz = HighlightedColor;
+                }
+
                 return o;
             }
 
