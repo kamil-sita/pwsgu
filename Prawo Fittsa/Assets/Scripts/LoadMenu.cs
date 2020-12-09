@@ -18,7 +18,11 @@ public class LoadMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
         if (buttonPressed)
         {
             buttonPressed = false;
-            StoreCSV.saveCSV(GameObject.Find("Watcher").GetComponent<ClickableManager>().getAreas(), GameObject.Find("Watcher").GetComponent<ClickableManager>().getAmplitudes());
+            StoreCSV.saveCSV(
+                GameObject.Find("Watcher").GetComponent<ClickableManager>().getAreas(), 
+                GameObject.Find("Watcher").GetComponent<ClickableManager>().getAmplitudes(),
+                GameObject.Find("Watcher").GetComponent<ClickableManager>().getTimes()
+            );
             SceneLoader.Load(SceneLoader.Scene.MainMenu);
         }
     }

@@ -79,6 +79,16 @@ public class ClickableManager : MonoBehaviour, ClickableListener
     /// List of areas (areas of clicked objects)
     /// </summary>
     private List<float> areas = new List<float>();
+
+    /// <summary>
+    /// Contains a list of times, between succeeding clicks
+    /// </summary>
+    private List<float> times = new List<float>();
+
+    /// <summary>
+    /// Time of last click
+    /// </summary>
+    private float lastClickTime = -1;
     
     /// <summary>
     /// First area is ignored, this flag is true, and on first calculation of the area, it is changed
@@ -175,8 +185,23 @@ public class ClickableManager : MonoBehaviour, ClickableListener
         var clickedAtLastIteration = clickable.selectedElement;
         if (clickedAtLastIteration.transform.gameObject == selectedGameObject) //clicked element was the one that we looked for
         {
+            //calculating time between clicks
+            float lastClickTimeTmp = lastClickTime;
+            float thisClickTimeTmp = Time.time;
+
+            if (lastClickTimeTmp != -1)
+            {
+                float diff = thisClickTimeTmp - lastClickTimeTmp;
+                times.Add(diff);
+            }
+
+            lastClickTime = thisClickTimeTmp;
+
+            //line drawing
             lineDrawer.removeLine();
             lineDrawer.drawLine();
+
+            //calculating area of an object
             MeshFilter viewedModelFilter = (MeshFilter)selectedGameObject.GetComponent("MeshFilter");
             viewedModel = viewedModelFilter.sharedMesh;
             float objectArea = (CalculateSurfaceArea(viewedModel, selectedGameObject.transform.localScale)) / CalculateCameraObjectDistance(); //
@@ -189,8 +214,12 @@ public class ClickableManager : MonoBehaviour, ClickableListener
             {
                 areas.Add(objectArea);
             }
+
+            //iterating
             cycleIteration();
             selectedGameObject = null;
+
+            //sending message to reset material
             ExecuteEvents.Execute<MaterialChangeListener>(
                                 clickedAtLastIteration.transform.gameObject,
                                 null,
@@ -469,5 +498,14 @@ public class ClickableManager : MonoBehaviour, ClickableListener
     public List<float> getAmplitudes()
     {
         return amplitudes;
+    }
+
+    /// <summary>
+    /// Returns list of times, between succeeding clicks
+    /// </summary>
+    /// <returns></returns>
+    public List<float> getTimes()
+    {
+        return times;
     }
 }

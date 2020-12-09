@@ -8,13 +8,13 @@ using UnityEngine;
 
 public class StoreCSV 
 {
-    public static void saveCSV(List<float> areas, List<float> amplitudes)
+    public static void saveCSV(List<float> areas, List<float> amplitudes, List<float> times)
     {
         var fittsList = new List<FittsData>();
         for (var i = 0; i < areas.Count; ++i)
         {
             if (amplitudes.Count < i) continue;
-            var fittsElement = new FittsData(areas[i],amplitudes[i]);
+            var fittsElement = new FittsData(areas[i],amplitudes[i], times[i]);
             fittsList.Add(fittsElement);
         }
 
