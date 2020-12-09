@@ -11,15 +11,17 @@ using UnityEngine;
 /// </summary>
 public class FittsData {
 
-   public FittsData(float area, float amplitude, float time)
+   public FittsData(float area, float amplitude, float time, float iod)
     {
         this.Area = area;
         this.Amplitude = amplitude;
         this.Time = time;
+        this.IoD = iod;
     }
     public float Area { get; set; }
     public float Amplitude { get; set; }
     public float Time { get; set; }
+    public float IoD { get; set; }
 }
 
 /// <summary>
