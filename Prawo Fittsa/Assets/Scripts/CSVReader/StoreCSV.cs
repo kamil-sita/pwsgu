@@ -9,6 +9,10 @@ using UnityEngine;
 public class StoreCSV 
 {
     public static void saveCSV(List<float> areas, List<float> amplitudes, List<float> times, List<float> iods)
+    /// Save list of areas and ampitudes to fittsData file
+    /// </summary>
+    /// <param name="areas"></param>
+    /// <param name="amplitudes"></param>
     {
         var fittsList = new List<FittsData>();
         for (var i = 0; i < areas.Count; ++i)

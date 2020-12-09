@@ -94,12 +94,18 @@ public class LoadMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
 
         return new Vector2(a, b);
     }
-
+    /// <summary>
+    /// Check whether mouse button is pressed down
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerDown(PointerEventData eventData)
     {
         buttonPressed = true;
     }
-
+    /// <summary>
+    /// Check whether mouse button is pressed up
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerUp(PointerEventData eventData)
     {
         buttonPressed = false;
