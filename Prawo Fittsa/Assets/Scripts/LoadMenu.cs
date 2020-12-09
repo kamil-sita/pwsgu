@@ -5,6 +5,16 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class LoadMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
+
+    public static List<float> areas { get; internal set; }
+    public static List<float> amplitudes { get; internal set; }
+    public static List<float> times { get; internal set; }
+    public static List<float> id { get; internal set; }
+    public static float a { get; internal set; }
+    public static float b { get; internal set; }
+
+
+
     [SerializeField] private Button returnButton;
     private bool buttonPressed;
     void Start()
@@ -20,12 +30,12 @@ public class LoadMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
             buttonPressed = false;
 
             ClickableManager cm = GameObject.Find("Watcher").GetComponent<ClickableManager>();
-            List<float> areas = cm.getAreas();
-            List<float> amplitudes = cm.getAmplitudes();
-            List<float> times = cm.getTimes();
+            areas = cm.getAreas();
+            amplitudes = cm.getAmplitudes();
+            times = cm.getTimes();
 
             //linear regression
-            List<float> id = new List<float>();
+            id = new List<float>();
 
             for (int i = 0; i < areas.Count; i++)
             {
@@ -41,6 +51,9 @@ public class LoadMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
             Debug.Log("A:" + coords.x);
             Debug.Log("B:" + coords.y);
 
+            a = coords.x;
+            b = coords.y;
+
 
             //saving csv data
             StoreCSV.saveCSV(
@@ -49,7 +62,7 @@ public class LoadMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
                 times,
                 id
             );
-            SceneLoader.Load(SceneLoader.Scene.MainMenu);
+            SceneLoader.Load(SceneLoader.Scene.Graphs);
         }
     }
 
